@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Plano Gerado</h2>
+
+<pre>{{ plano }}</pre>
+
+<form action="/avaliar" method="POST">
+<input type="hidden" name="plano" value="{{ plano }}">
+
+<input type="number" name="nota"><br>
+<textarea name="comentario"></textarea><br>
+
+<button type="submit">Avaliar</button>
+</form>
+
+</body>
+</html>
