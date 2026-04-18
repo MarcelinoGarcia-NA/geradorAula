@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de Plano de Aula</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    /* STEPS */
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .step {
+      flex: 1;
+    }
+
+    .step-circle {
+      width: 35px;
+      height: 35px;
+      background: #6c5ce7;
+      color: white;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 5px;
+    }
+
+    /* CARDS */
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    /* INPUTS */
+    .row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .col {
+      flex: 1;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      margin-top: 5px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    /* FILE UPLOAD */
+    .upload {
+      border: 2px dashed #ccc;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      color: #888;
+    }
+
+    /* BUTTON */
+    button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(90deg, #6c5ce7, #a29bfe);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- STEPS -->
+    <div class="steps">
+      <div class="step">
+        <div class="step-circle">1</div>
+        <div>Dados Iniciais</div>
+      </div>
+      <div class="step">
+        <div class="step-circle">2</div>
+        <div>Geração IA</div>
+      </div>
+      <div class="step">
+        <div class="step-circle">3</div>
+        <div>Revisão</div>
+      </div>
+      <div class="step">
+        <div class="step-circle">4</div>
+        <div>Salvar</div>
+      </div>
+    </div>
+
+    <!-- CONFIG IA -->
+    <div class="card">
+      <h3>Configuração da IA</h3>
+      <select>
+            <option>GPT (OpenAI)</option>
+            <option>Claude</option>
+        </select>
+    </div>
+
+    <!-- FORM -->
+    <div class="card">
+      <h3>Dados do Plano de Aulas</h3>
+
+      <div class="row">
+        <div class="col">
+          <label>Disciplina</label>
+          <input type="text" placeholder="Ex: Engenharia de Software">
+        </div>
+        <div class="col">
+          <label>Curso</label>
+          <input type="text" placeholder="Ex: Ciência da Computação">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Carga Horária</label>
+          <input type="text" placeholder="Ex: 60h">
+        </div>
+        <div class="col">
+          <label>Quantidade de Aulas</label>
+          <input type="number" placeholder="Ex: 15">
+        </div>
+        <div class="col">
+          <label>Duração da Aula</label>
+          <input type="text" placeholder="Ex: 2h">
+        </div>
+      </div>
+
+      <label>Ementa</label>
+      <textarea rows="3" placeholder="Descreva a ementa da disciplina..."></textarea>
+
+      <br><br>
+
+      <label>Objetivo Geral</label>
+      <textarea rows="3" placeholder="Descreva o objetivo geral da disciplina..."></textarea>
+
+      <br><br>
+
+      <label>Arquivo de Apoio (opcional)</label>
+
+      <input type="file" name="arquivo" style="margin-top:10px;">
+
+      <br><br>
+
+      <button type="submit">🚀 Gerar Plano de Aulas</button>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>
