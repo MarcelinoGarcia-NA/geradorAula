@@ -1,33 +1,36 @@
 %%writefile Gerador.py
 from groq import Groq
-import os
 
 def gerar_plano(dados):
-    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+    try:
+        client = Groq(api_key="")  # 🔥 coloque sua chave aqui
 
-    prompt = f"""
-    Você é um especialista em educação superior.
+        prompt = f"""
+        Você é um especialista em educação superior.
 
-    Crie um plano de aula com base nos dados:
+        Crie um plano de aula:
 
-    Disciplina: {dados['disciplina']}
-    Curso: {dados['curso']}
-    Carga horária: {dados['carga']}
-    Quantidade de aulas: {dados['qtd_aulas']}
-    Duração: {dados['duracao']}
-    Ementa: {dados['ementa']}
-    Objetivo geral: {dados['objetivo']}
+        Disciplina: {dados['disciplina']}
+        Curso: {dados['curso']}
+        Carga horária: {dados['carga']}
+        Quantidade de aulas: {dados['qtd_aulas']}
+        Duração: {dados['duracao']}
+        Ementa: {dados['ementa']}
+        Objetivo geral: {dados['objetivo']}
 
-    Estruture com:
-    - objetivos específicos
-    - conteúdos por aula
-    - metodologia
-    - avaliação
-    """
+        Estruture com:
+        - Objetivos específicos
+        - Conteúdos por aula
+        - Metodologia
+        - Avaliação
+        """
 
-    resposta = client.chat.completions.create(
-        model="llama3-70b-8192",
-        messages=[{"role": "user", "content": prompt}]
-    )
+        resposta = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": prompt}]
+        )
 
-    return resposta.choices[0].message.content
+        return resposta.choices[0].message.content
+
+    except Exception as e:
+        return f"ERRO: {str(e)}"
