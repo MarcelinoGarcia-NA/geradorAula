@@ -1,4 +1,3 @@
-%%writefile Gerador.py
 import os
 import anthropic
 from openai import OpenAI
