@@ -1,36 +1,60 @@
 %%writefile Gerador.py
-from groq import Groq
+import os
+import anthropic
+from openai import OpenAI
 
-def gerar_plano(dados):
+def gerar_plano(dados, ia="claude"):
+    prompt = f"""
+Crie um plano de aula:
+
+Disciplina: {dados.get('disciplina')}
+Curso: {dados.get('curso')}
+Carga: {dados.get('carga')}
+Aulas: {dados.get('qtd_aulas')}
+Duração: {dados.get('duracao')}
+Ementa: {dados.get('ementa')}
+Objetivo: {dados.get('objetivo')}
+
+Inclua:
+- Objetivos específicos
+- Conteúdos por aula
+- Metodologia
+- Avaliação
+"""
+
     try:
-        client = Groq(api_key="")  # 🔥 coloque sua chave aqui
+        # 🔥 CLAUDE
+        if ia == "claude":
+            client = anthropic.Anthropic(
+                api_key=os.environ["ANTHROPIC_API_KEY"]
+            )
 
-        prompt = f"""
-        Você é um especialista em educação superior.
+            msg = client.messages.create(  # ✅ alinhado correto
+                model="claude-3-haiku-20240307",
+                max_tokens=1500,
+                messages=[
+                    {"role": "user", "content": prompt}
+                ]
+            )
 
-        Crie um plano de aula:
+            return msg.content[0].text
 
-        Disciplina: {dados['disciplina']}
-        Curso: {dados['curso']}
-        Carga horária: {dados['carga']}
-        Quantidade de aulas: {dados['qtd_aulas']}
-        Duração: {dados['duracao']}
-        Ementa: {dados['ementa']}
-        Objetivo geral: {dados['objetivo']}
+        # 🔥 GPT
+        elif ia == "gpt":
+            client = OpenAI(
+                api_key=os.environ["OPENAI_API_KEY"]
+            )
 
-        Estruture com:
-        - Objetivos específicos
-        - Conteúdos por aula
-        - Metodologia
-        - Avaliação
-        """
+            resp = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "Você é professor universitário."},
+                    {"role": "user", "content": prompt}
+                ]
+            )
 
-        resposta = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[{"role": "user", "content": prompt}]
-        )
-
-        return resposta.choices[0].message.content
+            return resp.choices[0].message.content
 
     except Exception as e:
-        return f"ERRO: {str(e)}"
+        import traceback
+        return "<pre>" + traceback.format_exc() + "</pre>"
