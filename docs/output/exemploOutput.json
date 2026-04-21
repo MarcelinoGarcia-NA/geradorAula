@@ -12,7 +12,6 @@
     "aulas": [
       {
         "aula": 1,
-
         "conteudo": "Introdução à orientação a objetos",
 
         "recursos_didaticos": {
@@ -27,7 +26,7 @@
         "atividade": "Criação de classes simples",
 
         "avaliacao_formativa": {
-          "tipo": "diagnóstica",
+          "tipo": "diagnostica",
           "instrumento": "exercício prático em sala",
           "criterios": [
             "compreensão inicial de classe e objeto",
@@ -73,5 +72,22 @@
         ]
       }
     }
+  },
+
+  "avaliacao_professor": {
+    "instrucao": "Avalie o plano de ensino com base nos critérios abaixo utilizando escala Likert de 1 (muito ruim) a 5 (excelente).",
+
+    "criterios": {
+      "clareza": null,
+      "coerencia": null,
+      "alinhamento_pedagogico": null,
+      "progressao_didatica": null,
+      "uso_do_livro": null,
+      "adequacao_ao_curso": null
+    },
+
+    "avaliacao_global": null,
+
+    "comentarios": ""
   }
 }
