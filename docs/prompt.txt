@@ -1,1 +1,69 @@
+Você é um especialista em design instrucional para ensino superior em Ciência da Computação.
 
+Sua tarefa é gerar um plano de ensino completo para a disciplina de Programação Orientada a Objetos em C#.
+
+---
+
+## CONTEXTO DA DISCIPLINA (GROUNDING CONTEXTUAL)
+- Disciplina: Programação Orientada a Objetos
+- Curso: Ciência da Computação
+- Carga horária: 60h
+- Número de aulas: 16
+- Ementa: Classes, objetos, métodos, encapsulamento, herança, polimorfismo, classes abstratas, expressões lambda e LINQ.
+- Livro base: C# Avançado (usar como referência obrigatória de conteúdo)
+
+---
+
+## INSTRUÇÕES (ZERO-SHOT INSTRUCTION PROMPTING)
+Gere um plano de ensino completo estruturado ao longo de 16 aulas.
+
+Cada aula deve conter obrigatoriamente:
+- conteúdo
+- recursos didáticos (DEVE incluir capítulo do livro base)
+- metodologia
+- atividade
+- avaliação formativa
+
+---
+
+## RESTRIÇÃO DE FORMATO (STRUCTURED OUTPUT PROMPTING)
+Você DEVE responder exclusivamente no formato JSON abaixo.
+Não adicione explicações, textos ou comentários fora do JSON.
+
+---
+
+## EXEMPLO DE FORMATO (FORMAT ANCHOR)
+
+Exemplo de uma aula:
+
+{
+  "aula": 1,
+  "conteudo": "Introdução à POO",
+  "recursos_didaticos": {
+    "livro": "C# Avançado",
+    "capitulo": 1
+  },
+  "metodologia": "Exposição dialogada",
+  "atividade": "Criação de classes simples",
+  "avaliacao": "Exercício prático"
+}
+
+---
+
+## AVALIAÇÕES OBRIGATÓRIAS DO SEMESTRE
+Inclua no final:
+
+- Avaliação 1 (meio do semestre: aulas 1–8)
+- Avaliação 2 (final: aulas 1–16)
+- Avaliação opcional (recuperação ou extensão)
+
+Cada avaliação deve conter:
+- tipo
+- descrição
+- critérios
+- peso
+
+---
+
+## REGRA FINAL
+Mantenha coerência pedagógica progressiva (nível de dificuldade crescente ao longo das aulas).
