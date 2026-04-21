@@ -1,0 +1,77 @@
+{
+  "modelo": "gpt | claude",
+
+  "plano_de_ensino": {
+    "disciplina": "Programação Orientada a Objetos",
+    "curso": "Ciência da Computação",
+    "carga": "60h",
+    "qtd_aulas": 16,
+
+    "objetivo_geral": "Desenvolver habilidades em programação orientada a objetos utilizando C#.",
+
+    "aulas": [
+      {
+        "aula": 1,
+
+        "conteudo": "Introdução à orientação a objetos",
+
+        "recursos_didaticos": {
+          "livro": "C# Avançado",
+          "capitulo": 1,
+          "tema_capitulo": "Introdução à POO",
+          "uso": "fundamentação conceitual"
+        },
+
+        "metodologia": "Exposição dialogada com exemplos em código",
+
+        "atividade": "Criação de classes simples",
+
+        "avaliacao_formativa": {
+          "tipo": "diagnóstica",
+          "instrumento": "exercício prático em sala",
+          "criterios": [
+            "compreensão inicial de classe e objeto",
+            "aplicação básica de sintaxe em C#"
+          ]
+        }
+      }
+    ],
+
+    "avaliacoes_do_semestre": {
+      "avaliacao_1_meio_semestre": {
+        "tipo": "formativa",
+        "periodo": "aulas 1-8",
+        "descricao": "avaliação intermediária prática sobre conceitos de POO",
+        "peso": 30,
+        "criterios": [
+          "compreensão de encapsulamento",
+          "uso de classes e objetos",
+          "aplicação de conceitos em problemas simples"
+        ]
+      },
+
+      "avaliacao_2_final": {
+        "tipo": "somativa",
+        "periodo": "aulas 1-16",
+        "descricao": "projeto integrador em C# aplicando todos os conceitos de POO",
+        "peso": 60,
+        "criterios": [
+          "coerência do design",
+          "uso correto de herança e polimorfismo",
+          "qualidade da implementação"
+        ]
+      },
+
+      "avaliacao_opcional": {
+        "tipo": "recuperacao_ou_extensao",
+        "descricao": "atividade adicional para reforço ou aprofundamento dos conteúdos",
+        "peso": 10,
+        "criterios": [
+          "reforço conceitual",
+          "correção de erros anteriores",
+          "melhoria incremental do código"
+        ]
+      }
+    }
+  }
+}
