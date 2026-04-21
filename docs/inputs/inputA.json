@@ -1,1 +1,10 @@
-
+{
+  "disciplina": "Programação Orientada a Objetos",
+  "curso": "Ciência da Computação",
+  "carga": "60h",
+  "qtd_aulas": 16,
+  "duracao": "2h por aula",
+  "ementa": "Classes e objetos, métodos, construtores, elementos estáticos, encapsulamento (get e set), herança, polimorfismo, classes abstratas, expressões LAMBDA e LINQ [10, 11].",
+  "objetivo": "Desenvolver habilidades avançadas na linguagem C# para a criação de softwares personalizados e flexíveis [11-13].",
+  "texto_arquivo": "Curso: **Linguagem de Programação C# Avançado** [11]. O conteúdo explora temas como a abstração de problemas reais para o código, reutilização através de herança e o uso de delegates para comunicação flexível entre objetos [14-16]."
+}
