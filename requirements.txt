@@ -1,0 +1,5 @@
+flask
+openai
+anthropic
+gunicorn
+PyPDF2
