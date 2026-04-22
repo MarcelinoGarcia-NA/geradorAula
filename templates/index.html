@@ -2,196 +2,302 @@
 <html lang="pt-br">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Gerador de Plano de Aula</title>
+<meta charset="UTF-8">
+<title>Gerador de Plano de Aula</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f6fa;
-      margin: 0;
-      padding: 20px;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f6fa;
+  margin: 0;
+  padding: 20px;
+}
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-    }
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
 
-    .steps {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      text-align: center;
-    }
+.steps {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  text-align: center;
+}
 
-    .step {
-      flex: 1;
-    }
+.step {
+  flex: 1;
+}
 
-    .step-circle {
-      width: 35px;
-      height: 35px;
-      background: #6c5ce7;
-      color: white;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 5px;
-    }
+.step-circle {
+  width: 35px;
+  height: 35px;
+  background: #6c5ce7;
+  color: white;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+}
 
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
 
-    .row {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
+.row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
 
-    .col {
-      flex: 1;
-    }
+.col {
+  flex: 1;
+}
 
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      margin-top: 5px;
-    }
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-top: 5px;
+}
 
-    textarea {
-      resize: vertical;
-    }
+textarea {
+  resize: vertical;
+}
 
-    button {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(90deg, #6c5ce7, #a29bfe);
-      border: none;
-      border-radius: 10px;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
+button {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(90deg, #6c5ce7, #a29bfe);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-    button:hover {
-      opacity: 0.9;
-    }
-  </style>
+button:hover {
+  opacity: 0.9;
+}
 
+.resultado-container {
+  display: none;
+  gap: 20px;
+}
+
+.resultado-left {
+  flex: 1.2;
+}
+
+.resultado-right {
+  flex: 1;
+}
+
+.plano-box {
+  background: #fafafa;
+  padding: 15px;
+  border-radius: 8px;
+  max-height: 600px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 14px; /* 🔥 aqui resolve o “colado” */
+  box-sizing: border-box;
+}
+
+.aula {
+  background: white;
+  border-left: 6px solid #6c5ce7;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.aula h2 {
+  margin-top: 0;
+  color: #6c5ce7;
+}
+
+h4 {
+  margin-bottom: 5px;
+  color: #333;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div class="steps">
-      <div class="step">
-        <div class="step-circle">1</div>
-        <div>Dados Iniciais</div>
-      </div>
-      <div class="step">
-        <div class="step-circle">2</div>
-        <div>Geração IA</div>
-      </div>
-      <div class="step">
-        <div class="step-circle">3</div>
-        <div>Revisão</div>
-      </div>
-      <div class="step">
-        <div class="step-circle">4</div>
-        <div>Salvar</div>
-      </div>
-    </div>
+<div class="steps">
+  <div class="step"><div class="step-circle">1</div>Dados</div>
+  <div class="step"><div class="step-circle">2</div>IA</div>
+  <div class="step"><div class="step-circle">3</div>Resultado</div>
+  <div class="step"><div class="step-circle">4</div>Avaliação</div>
+</div>
 
-    <form id="form" method="POST" action="/gerar" enctype="multipart/form-data">
+<form id="form">
 
-      <div class="card">
-        <h3>Configuração da IA</h3>
-        <select name="ia">
-          <option value="gpt">GPT (OpenAI)</option>
-          <option value="claude">Claude</option>
-        </select>
-      </div>
+<div class="card">
 
-      <div class="card">
-        <h3>Dados do Plano de Aulas</h3>
+<h3>Configuração</h3>
 
-        <div class="row">
-          <div class="col">
-            <label>Disciplina</label>
-            <input type="text" name="disciplina" required>
-          </div>
-          <div class="col">
-            <label>Curso</label>
-            <input type="text" name="curso" required>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col">
-            <label>Carga Horária</label>
-            <input type="text" name="carga" required>
-          </div>
-          <div class="col">
-            <label>Quantidade de Aulas</label>
-            <input type="number" name="qtd_aulas" required>
-          </div>
-          <div class="col">
-            <label>Duração da Aula</label>
-            <input type="text" name="duracao" required>
-          </div>
-        </div>
-
-        <label>Ementa</label>
-        <textarea name="ementa" rows="3" required></textarea>
-
-        <br><br>
-
-        <label>Objetivo Geral</label>
-        <textarea name="objetivo" rows="3" required></textarea>
-
-        <br><br>
-
-        <label>Arquivo de Apoio (opcional)</label>
-        <input type="file" name="arquivo" style="margin-top:10px;">
-
-        <br><br>
-
-        <button type="submit">🚀 Gerar Plano de Aulas</button>
-
-      </div>
-    </form>
-
+<div class="row">
+  <div class="col">
+    <label>Disciplina</label>
+    <input name="disciplina" placeholder="Ex: Programação Orientada a Objetos" required>
   </div>
 
+  <div class="col">
+    <label>Curso</label>
+    <input name="curso" placeholder="Ex: Ciência da Computação" required>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <label>Carga Horária</label>
+    <input name="carga" placeholder="Ex: 60h">
+  </div>
+
+  <div class="col">
+    <label>Número de Aulas</label>
+    <input name="qtd_aulas" placeholder="Ex: 16" value="16">
+  </div>
+
+  <div class="col">
+    <label>Duração por Aula</label>
+    <input name="duracao" placeholder="Ex: 2h">
+  </div>
+</div>
+
+<label>Ementa</label>
+<textarea name="ementa" placeholder="Ex: Classes, objetos, encapsulamento, herança, polimorfismo, LINQ..."></textarea>
+
+<label>Objetivo</label>
+<textarea name="objetivo" placeholder="Ex: Desenvolver sistemas utilizando POO em C#"></textarea>
+
+<!-- ✅ INPUT DE ARQUIVO -->
+<label>Arquivo PDF (opcional)</label>
+<input type="file" name="arquivo" accept="application/pdf">
+
+<label>Modelo de IA</label>
+<select name="ia">
+  <option value="gpt">GPT</option>
+  <option value="claude">Claude</option>
+</select>
+
+<br><br>
+
+<button type="submit">🚀 Gerar Plano</button>
+
+</div>
+
+</form>
+
+<div id="resultado" class="resultado-container">
+
+<div class="resultado-left card">
+<h3>Plano Gerado</h3>
+<div id="conteudo" class="plano-box"></div>
+</div>
+
+<div class="resultado-right card">
+<h3>Avaliação</h3>
+
+<input id="nomeProfessor" placeholder="Nome do professor">
+
+<div class="metric-grid">
+  <div>
+    <label>Fluidez</label>
+    <input type="number" min="0" max="5" onchange="av.fluidez=this.value">
+  </div>
+
+  <div>
+    <label>Capacidade</label>
+    <input type="number" min="0" max="5" onchange="av.capacidade=this.value">
+  </div>
+
+  <div>
+    <label>Diversidade</label>
+    <input type="number" min="0" max="5" onchange="av.diversidade=this.value">
+  </div>
+
+  <div>
+    <label>Complexidade</label>
+    <input type="number" min="0" max="5" onchange="av.complexidade=this.value">
+  </div>
+
+  <div>
+    <label>Relevância</label>
+    <input type="number" min="0" max="5" onchange="av.relevancia=this.value">
+  </div>
+</div>
+
+<br>
+
+<label>
+Comentários
+</label>
+
+<textarea placeholder="Observações..." onchange="av.observacoes=this.value"></textarea>
+
+<button type="button" onclick="salvar()">📊 Salvar Avaliação</button>
+
+</div>
+
+</div>
+
+</div>
+
 <script>
-document.getElementById("form").addEventListener("submit", async function(e) {
+let av = {
+  fluidez:0,
+  capacidade:0,
+  diversidade:0,
+  complexidade:0,
+  relevancia:0,
+  incompleta:false,
+  observacoes:""
+};
+
+document.getElementById("form").addEventListener("submit", async function(e){
   e.preventDefault();
 
-  const formData = new FormData(this);
-
-  let resultado = document.getElementById("resultado-stream");
-
-  if (!resultado) {
-    resultado = document.createElement("div");
-    resultado.className = "card";
-    resultado.innerHTML = "<h3>Resultado</h3><div id='conteudo'></div>";
-    document.querySelector(".container").appendChild(resultado);
-  }
-
+  const resultado = document.getElementById("resultado");
   const conteudo = document.getElementById("conteudo");
-  conteudo.innerHTML = "⏳ Gerando...<br><br>";
+
+  resultado.style.display = "flex";
+  conteudo.innerHTML = "⏳ Gerando plano...<br><br>";
+
+  const formData = new FormData(this);
 
   const response = await fetch("/gerar", {
     method: "POST",
@@ -201,13 +307,83 @@ document.getElementById("form").addEventListener("submit", async function(e) {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
+  conteudo.innerHTML = "";
 
-    conteudo.innerHTML += decoder.decode(value).replace(/\n/g, "<br>");
-  }
+  let buffer = "";
+
+function formatarPlano(texto) {
+  return texto
+    .replace(/=== AULA (\d+) ===/g, `
+      <div class="aula">
+        <h2>📘 Aula $1</h2>
+    `)
+    .replace(/Conteúdo:/g, "<h4>📌 Conteúdo</h4>")
+    .replace(/Recursos didáticos:/g, "<h4>📚 Recursos didáticos</h4>")
+    .replace(/Livro:/g, "<h4>📖 Livro</h4>")
+    .replace(/Capítulo:/g, "<h4>📘 Capítulo</h4>")
+    .replace(/Metodologia:/g, "<h4>🧠 Metodologia</h4>")
+    .replace(/Atividade:/g, "<h4>🛠 Atividade</h4>")
+    .replace(/Avaliação:/g, "<h4>🧾 Avaliação</h4>")
+    .replace(/\n/g, "<br>");
+}
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+
+  buffer += decoder.decode(value);
+
+  conteudo.innerHTML = formatarPlano(buffer);
+}
 });
+
+async function salvar(){
+  
+  const nome = document.getElementById("nomeProfessor").value;
+
+  const total = Number(av.fluidez)+Number(av.capacidade)+Number(av.diversidade)+Number(av.complexidade)+Number(av.relevancia);
+  const media = (total/5).toFixed(2);
+
+  const dados = {
+    professor: nome,
+    questao: 1,
+    fluidez: av.fluidez,
+    capacidade: av.capacidade,
+    diversidade: av.diversidade,
+    complexidade: av.complexidade,
+    relevancia: av.relevancia,
+    media: media,
+    incompleta: av.incompleta ? "Sim":"Não",
+    observacoes: av.observacoes
+  };
+
+  // pega plano gerado da tela
+  const plano = document.getElementById("conteudo").innerText;
+
+  const payload = {
+    plano: plano,
+    avaliacao: dados,
+    formulario: {
+      disciplina: document.querySelector("[name=disciplina]").value,
+      curso: document.querySelector("[name=curso]").value,
+      carga: document.querySelector("[name=carga]").value,
+      qtd_aulas: document.querySelector("[name=qtd_aulas]").value
+    }
+  };
+
+  const res = await fetch("/download_plano", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(payload)
+  });
+
+  const blob = await res.blob();
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "plano_completo.zip";
+  link.click();
+}
 </script>
 
 </body>
