@@ -88,19 +88,16 @@ def formatar_plano_para_exportacao(plano_texto):
 
 
 def estruturar_plano(plano_texto):
-    aulas = re.split(r"📘 === AULA \d+ ===", plano_texto)
+    blocos = re.split(r"📘 Aula \d+", plano_texto)
+
+    numeros = re.findall(r"📘 Aula (\d+)", plano_texto)
 
     resultado = []
 
-    for i, aula in enumerate(aulas):
-        aula = aula.strip()
-
-        if not aula:
-            continue
-
+    for i, bloco in enumerate(blocos[1:]):
         resultado.append({
-            "aula": i + 1,
-            "conteudo_bruto": aula
+            "aula": int(numeros[i]) if i < len(numeros) else i + 1,
+            "conteudo": bloco.strip()
         })
 
     return resultado
@@ -128,8 +125,6 @@ def download_plano():
 
     # ===== JSON =====
     payload = {
-        "plano_bruto": plano,
-        "plano_formatado": plano_formatado,
         "plano_estruturado": plano_estrutura,
         "avaliacao": avaliacao,
         "formulario": formulario
