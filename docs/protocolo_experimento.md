@@ -108,4 +108,4 @@ A análise é realizada de forma comparativa entre os modelos, considerando:
 
 ## 10. Reprodutibilidade
 
-O experimento é totalmente reprodutível, permitindo que outros pesquisadores repliquem os resultados utilizando os mesmos inputs, prompt e modelos especificados.
+O experimento é totalmente reprodutível, permitindo que outros pesquisadores repliquem a metodologia utilizando os mesmos inputs, prompt e modelos especificados.
