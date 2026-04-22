@@ -111,7 +111,50 @@ button:hover {
 .metric-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 18px;
+}
+
+.metric {
+  background: #fafafa;
+  border: 1px solid #eee;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.metric-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+/* escala */
+.scale {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.scale label {
+  flex: 1;
+  text-align: center;
+  padding: 8px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background: white;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.scale input {
+  display: none;
+}
+
+/* estado selecionado */
+.scale input:checked + label {
+  background: #6c5ce7;
+  color: white;
+  border-color: #6c5ce7;
 }
 label {
   display: block;
@@ -234,32 +277,52 @@ h4 {
 
 <input id="nomeProfessor" placeholder="Nome do professor">
 
-<div class="metric-grid">
-  <div>
-    <label>Fluidez</label>
-    <input type="number" min="0" max="5" onchange="av.fluidez=this.value">
+<div class="metric">
+    <div class="metric-title">Capacidade</div>
+    <div class="scale">
+      <input type="radio" name="capacidade" id="c1" onclick="av.capacidade=1"><label for="c1">1</label>
+      <input type="radio" name="capacidade" id="c2" onclick="av.capacidade=2"><label for="c2">2</label>
+      <input type="radio" name="capacidade" id="c3" onclick="av.capacidade=3"><label for="c3">3</label>
+      <input type="radio" name="capacidade" id="c4" onclick="av.capacidade=4"><label for="c4">4</label>
+      <input type="radio" name="capacidade" id="c5" onclick="av.capacidade=5"><label for="c5">5</label>
+    </div>
   </div>
 
-  <div>
-    <label>Capacidade</label>
-    <input type="number" min="0" max="5" onchange="av.capacidade=this.value">
+  <!-- Diversidade -->
+  <div class="metric">
+    <div class="metric-title">Diversidade</div>
+    <div class="scale">
+      <input type="radio" name="diversidade" id="d1" onclick="av.diversidade=1"><label for="d1">1</label>
+      <input type="radio" name="diversidade" id="d2" onclick="av.diversidade=2"><label for="d2">2</label>
+      <input type="radio" name="diversidade" id="d3" onclick="av.diversidade=3"><label for="d3">3</label>
+      <input type="radio" name="diversidade" id="d4" onclick="av.diversidade=4"><label for="d4">4</label>
+      <input type="radio" name="diversidade" id="d5" onclick="av.diversidade=5"><label for="d5">5</label>
+    </div>
   </div>
 
-  <div>
-    <label>Diversidade</label>
-    <input type="number" min="0" max="5" onchange="av.diversidade=this.value">
+  <!-- Complexidade -->
+  <div class="metric">
+    <div class="metric-title">Complexidade</div>
+    <div class="scale">
+      <input type="radio" name="complexidade" id="co1" onclick="av.complexidade=1"><label for="co1">1</label>
+      <input type="radio" name="complexidade" id="co2" onclick="av.complexidade=2"><label for="co2">2</label>
+      <input type="radio" name="complexidade" id="co3" onclick="av.complexidade=3"><label for="co3">3</label>
+      <input type="radio" name="complexidade" id="co4" onclick="av.complexidade=4"><label for="co4">4</label>
+      <input type="radio" name="complexidade" id="co5" onclick="av.complexidade=5"><label for="co5">5</label>
+    </div>
   </div>
 
-  <div>
-    <label>Complexidade</label>
-    <input type="number" min="0" max="5" onchange="av.complexidade=this.value">
+  <!-- Relevância -->
+  <div class="metric">
+    <div class="metric-title">Relevância</div>
+    <div class="scale">
+      <input type="radio" name="relevancia" id="r1" onclick="av.relevancia=1"><label for="r1">1</label>
+      <input type="radio" name="relevancia" id="r2" onclick="av.relevancia=2"><label for="r2">2</label>
+      <input type="radio" name="relevancia" id="r3" onclick="av.relevancia=3"><label for="r3">3</label>
+      <input type="radio" name="relevancia" id="r4" onclick="av.relevancia=4"><label for="r4">4</label>
+      <input type="radio" name="relevancia" id="r5" onclick="av.relevancia=5"><label for="r5">5</label>
+    </div>
   </div>
-
-  <div>
-    <label>Relevância</label>
-    <input type="number" min="0" max="5" onchange="av.relevancia=this.value">
-  </div>
-</div>
 
 <br>
 
@@ -314,9 +377,11 @@ document.getElementById("form").addEventListener("submit", async function(e){
 function formatarPlano(texto) {
   return texto
     .replace(/=== AULA (\d+) ===/g, `
+      </div>
       <div class="aula">
         <h2>📘 Aula $1</h2>
     `)
+
     .replace(/Conteúdo:/g, "<h4>📌 Conteúdo</h4>")
     .replace(/Recursos didáticos:/g, "<h4>📚 Recursos didáticos</h4>")
     .replace(/Livro:/g, "<h4>📖 Livro</h4>")
@@ -338,7 +403,7 @@ while (true) {
 });
 
 async function salvar(){
-  
+
   const nome = document.getElementById("nomeProfessor").value;
 
   const total = Number(av.fluidez)+Number(av.capacidade)+Number(av.diversidade)+Number(av.complexidade)+Number(av.relevancia);
@@ -358,7 +423,7 @@ async function salvar(){
   };
 
   // pega plano gerado da tela
-  const plano = document.getElementById("conteudo").innerText;
+ const plano = document.getElementById("conteudo").innerText;
 
   const payload = {
     plano: plano,
@@ -384,6 +449,7 @@ async function salvar(){
   link.download = "plano_completo.zip";
   link.click();
 }
+
 </script>
 
 </body>
