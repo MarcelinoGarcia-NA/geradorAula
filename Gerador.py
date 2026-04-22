@@ -23,7 +23,7 @@ def gerar_plano_stream(dados, quantidade, ia="gpt"):
     prompt = f"""
 Você é um especialista em design instrucional para ensino superior em Ciência da Computação.
 
-Sua tarefa é gerar um plano de ensino completo para a disciplina de Programação Orientada a Objetos em C#.
+Sua tarefa é gerar um plano de ensino completo para a disciplina de {dados.get('disciplina')} do curso {dados.get('curso')}.
 
 ---
 
