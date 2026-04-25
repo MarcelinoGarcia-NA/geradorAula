@@ -1,10 +1,9 @@
-<!DOCTYPE html> 
-<html lang="pt-br">
 
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <title>Gerador de Plano de Aula</title>
-
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -12,180 +11,126 @@ body {
   margin: 0;
   padding: 20px;
 }
-
-.container {
-  max-width: 1200px;
-  margin: auto;
-}
-
+.container { max-width: 1200px; margin: auto; }
 .steps {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
   text-align: center;
 }
-
 .step { flex: 1; }
-
 .step-circle {
-  width: 35px;
-  height: 35px;
-  background: #6c5ce7;
-  color: white;
+  width: 35px; height: 35px;
+  background: #6c5ce7; color: white;
   border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-flex; align-items: center; justify-content: center;
   margin-bottom: 5px;
 }
-
 .card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
+  background: white; padding: 20px;
+  border-radius: 12px; margin-bottom: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-
-.row {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 15px;
-}
-
+.row { display: flex; gap: 15px; margin-bottom: 15px; }
 .col { flex: 1; }
-
 input, textarea, select {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  margin-top: 5px;
+  width: 100%; padding: 10px;
+  border-radius: 8px; border: 1px solid #ddd;
+  margin-top: 5px; box-sizing: border-box;
 }
-
 textarea { resize: vertical; }
-
 button {
-  width: 100%;
-  padding: 15px;
+  width: 100%; padding: 15px;
   background: linear-gradient(90deg, #6c5ce7, #a29bfe);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
+  border: none; border-radius: 10px;
+  color: white; font-size: 16px; cursor: pointer;
 }
-
 button:hover { opacity: 0.9; }
-
+button.secondary {
+  background: white; color: #6c5ce7;
+  border: 2px solid #6c5ce7; padding: 10px;
+  font-size: 14px;
+}
+button.danger {
+  background: white; color: #e74c3c;
+  border: 2px solid #e74c3c; padding: 10px;
+  font-size: 14px;
+}
 .resultado-container { display: none; gap: 20px; }
 .resultado-left { flex: 1.2; }
 .resultado-right { flex: 1; }
-
 .plano-box {
-  background: #fafafa;
-  padding: 15px;
-  border-radius: 8px;
-  max-height: 600px;
-  overflow-y: auto;
-  border: 1px solid #eee;
+  background: #fafafa; padding: 15px;
+  border-radius: 8px; max-height: 600px;
+  overflow-y: auto; border: 1px solid #eee;
 }
-
-.metric-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-
+.metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .metric {
-  background: #fafafa;
-  border: 1px solid #eee;
-  padding: 12px;
-  border-radius: 10px;
+  background: #fafafa; border: 1px solid #eee;
+  padding: 12px; border-radius: 10px;
 }
-
-.metric-title {
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.scale {
-  display: flex;
-  justify-content: space-between;
-  gap: 6px;
-}
-
+.metric-title { font-weight: 600; margin-bottom: 8px; }
+.scale { display: flex; justify-content: space-between; gap: 6px; }
 .scale label {
-  flex: 1;
-  text-align: center;
-  padding: 8px 0;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 1px solid #ddd;
-  background: white;
+  flex: 1; text-align: center; padding: 8px 0;
+  border-radius: 8px; cursor: pointer;
+  border: 1px solid #ddd; background: white;
 }
-
 .scale input { display: none; }
-
-.scale input:checked + label {
-  background: #6c5ce7;
-  color: white;
-}
-
+.scale input:checked + label { background: #6c5ce7; color: white; }
 .aula-card {
-  background: white;
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 20px;
+  background: white; border-radius: 14px;
+  padding: 20px; margin-bottom: 20px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   border-left: 6px solid #6c5ce7;
 }
-
-.aula-header {
-  font-size: 20px;
-  font-weight: bold;
-  color: #6c5ce7;
-  margin-bottom: 15px;
-}
-
-.aula-section {
-  margin-bottom: 14px;
-}
-
+.aula-header { font-size: 20px; font-weight: bold; color: #6c5ce7; margin-bottom: 15px; }
+.aula-section { margin-bottom: 14px; }
 .aula-section h4 {
-  margin: 0 0 6px 0;
-  font-size: 13px;
-  color: #777;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin: 0 0 6px 0; font-size: 13px;
+  color: #777; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.aula-section p { margin: 0; line-height: 1.6; color: #333; white-space: pre-line; }
+ul, li { page-break-inside: avoid; }
+.aula-card { page-break-inside: avoid; break-inside: avoid; margin-bottom: 10mm; }
+#conteudo { display: block; }
+
+/* ── Histórico ── */
+.historico-card {
+  background: white; border-radius: 12px;
+  padding: 16px 20px; margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-left: 5px solid #a29bfe;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+.historico-info { flex: 1; }
+.historico-titulo { font-weight: 600; color: #2d3436; margin-bottom: 4px; }
+.historico-meta { font-size: 12px; color: #888; }
+.historico-acoes { display: flex; gap: 8px; flex-shrink: 0; }
+.historico-acoes button { width: auto; padding: 8px 14px; font-size: 13px; }
+.badge-ia {
+  display: inline-block; padding: 2px 8px;
+  border-radius: 20px; font-size: 11px; font-weight: 600;
+  background: #e0dbff; color: #6c5ce7; margin-left: 8px;
+}
+.empty-state {
+  text-align: center; padding: 40px 20px;
+  color: #aaa; font-size: 14px;
 }
 
-.aula-section p {
-  margin: 0;
-  line-height: 1.6;
-  color: #333;
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: #2d3436; color: white;
+  padding: 12px 20px; border-radius: 10px;
+  font-size: 14px; z-index: 9999;
+  opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
 }
-
-/* melhora leitura */
-.aula-section p {
-  white-space: pre-line;
-}
-
-ul, li {
-  page-break-inside: avoid;
-}
-.aula-card {
-  page-break-inside: avoid;
-  break-inside: avoid;
-  margin-bottom: 10mm;
-}
-
-#conteudo {
-  display: block;
-}
+.toast.show { opacity: 1; }
 </style>
 </head>
-
 <body>
 
 <div class="container">
@@ -198,322 +143,527 @@ ul, li {
 </div>
 
 <form id="form">
-
 <div class="card">
-
-<h3>Configuração</h3>
-
-<div class="row">
-  <div class="col">
-    <label>Disciplina</label>
-    <input value="Algoritmos e Lógica de Programação" readonly>
-    <input type="hidden" name="disciplina" value="Algoritmos e Lógica de Programação">
+  <h3>Configuração</h3>
+  <div class="row">
+    <div class="col">
+      <label>Disciplina</label>
+      <input value="Algoritmos e Lógica de Programação" readonly>
+      <input type="hidden" name="disciplina" value="Algoritmos e Lógica de Programação">
+    </div>
+    <div class="col">
+      <label>Curso</label>
+      <input value="Ciência da Computação" readonly>
+      <input type="hidden" name="curso" value="Ciência da Computação">
+    </div>
   </div>
-
-  <div class="col">
-    <label>Curso</label>
-    <input value="Ciência da Computação" readonly>
-    <input type="hidden" name="curso" value="Ciência da Computação">
+  <div class="row">
+    <div class="col">
+      <label>Carga Horária</label>
+      <input value="60h" readonly>
+      <input type="hidden" name="carga" value="60h">
+    </div>
+    <div class="col">
+      <label>Número de Aulas</label>
+      <input value="3" readonly>
+      <input type="hidden" name="qtd_aulas" value="3">
+    </div>
+    <div class="col">
+      <label>Duração</label>
+      <input value="1h30" readonly>
+      <input type="hidden" name="duracao" value="1h30">
+    </div>
   </div>
+  <label>Ementa</label>
+  <textarea readonly>Variáveis, tipos de dados, estruturas condicionais e repetição.</textarea>
+  <input type="hidden" name="ementa" value="Variáveis, tipos de dados, estruturas condicionais e repetição.">
+  <label>Objetivo</label>
+  <textarea readonly>Introduzir conceitos básicos de programação para iniciantes.</textarea>
+  <input type="hidden" name="objetivo" value="Introduzir conceitos básicos de programação para iniciantes.">
+  <label>Arquivo PDF</label>
+  <input type="file" name="arquivo">
+  <div class="row">
+    <div class="col">
+      <label>Modelo</label>
+      <select name="ia" id="ia" onchange="verificarCache()">
+        <option value="gpt">GPT</option>
+        <option value="claude">Claude</option>
+      </select>
+    </div>
+    <div class="col">
+      <label>Tópico</label>
+      <select name="topico" id="topico" onchange="verificarCache()">
+        <option>Variáveis e tipos de dados</option>
+        <option>Estruturas condicionais</option>
+        <option>Estruturas de repetição</option>
+      </select>
+    </div>
+  </div>
+  <button type="submit">🚀 Gerar Plano</button>
 </div>
-
-<div class="row">
-  <div class="col">
-    <label>Carga Horária</label>
-    <input value="60h" readonly>
-    <input type="hidden" name="carga" value="60h">
-  </div>
-
-  <div class="col">
-    <label>Número de Aulas</label>
-    <input value="3" readonly>
-    <input type="hidden" name="qtd_aulas" value="3">
-  </div>
-
-  <div class="col">
-    <label>Duração</label>
-    <input value="1h30" readonly>
-    <input type="hidden" name="duracao" value="1h30">
-  </div>
-</div>
-
-<label>Ementa</label>
-<textarea readonly>Variáveis, tipos de dados, estruturas condicionais e repetição.</textarea>
-<input type="hidden" name="ementa" value="Variáveis, tipos de dados, estruturas condicionais e repetição.">
-
-<label>Objetivo</label>
-<textarea readonly>Introduzir conceitos básicos de programação para iniciantes.</textarea>
-<input type="hidden" name="objetivo" value="Introduzir conceitos básicos de programação para iniciantes.">
-
-<label>Arquivo PDF</label> <input type="file" name="arquivo"> <div class="row"> <div class="col"> <label>Modelo</label> <select name="ia" id="ia" onchange="verificarCache()"> <option value="gpt">GPT</option> <option value="claude">Claude</option> </select> </div> <div class="col"> <label>Tópico</label> <select name="topico" id="topico" onchange="verificarCache()"> <option>Variáveis e tipos de dados</option> <option>Estruturas condicionais</option> <option>Estruturas de repetição</option> </select> </div> </div>
-
-<button type="submit">🚀 Gerar Plano</button>
-
-</div>
-
 </form>
 
+<!-- RESULTADO -->
 <div id="resultado" class="resultado-container">
 
-<div class="resultado-left card">
-<h3>Plano Gerado</h3>
-<button type="button" onclick="baixarPDF()">📄 Baixar PDF</button>
-<div id="conteudo" class="plano-box"></div>
-</div>
+  <div class="resultado-left card">
+    <h3>Plano Gerado</h3>
+    <div class="row" style="margin-bottom:10px;">
+      <div class="col"><button type="button" onclick="baixarPDF()">📄 Baixar PDF</button></div>
+      <div class="col"><button type="button" class="secondary" onclick="baixarJSON()">💾 Baixar JSON</button></div>
+      <div class="col"><button type="button" class="secondary" onclick="salvarNoHistorico()">📌 Salvar no Histórico</button></div>
+    </div>
+    <div id="conteudo" class="plano-box"></div>
+  </div>
 
-<div class="resultado-right card">
-<h3>Avaliação</h3>
-
-<input id="nomeProfessor" placeholder="Nome do professor">
-
-<div class="metric-grid">
-
-<div class="metric">
-<div class="metric-title">Capacidade</div>
-<div class="scale">
-<input type="radio" name="cap" onclick="av.capacidade=1"><label>1</label>
-<input type="radio" name="cap" onclick="av.capacidade=2"><label>2</label>
-<input type="radio" name="cap" onclick="av.capacidade=3"><label>3</label>
-<input type="radio" name="cap" onclick="av.capacidade=4"><label>4</label>
-<input type="radio" name="cap" onclick="av.capacidade=5"><label>5</label>
-</div>
-</div>
-
-<div class="metric">
-<div class="metric-title">Diversidade</div>
-<div class="scale">
-<input type="radio" onclick="av.diversidade=1"><label>1</label>
-<input type="radio" onclick="av.diversidade=2"><label>2</label>
-<input type="radio" onclick="av.diversidade=3"><label>3</label>
-<input type="radio" onclick="av.diversidade=4"><label>4</label>
-<input type="radio" onclick="av.diversidade=5"><label>5</label>
-</div>
-</div>
-
-</div>
-
-<textarea placeholder="Comentários..." onchange="av.observacoes=this.value"></textarea>
-
-<button type="button" onclick="salvar()">Salvar</button>
+  <div class="resultado-right card">
+    <h3>Avaliação</h3>
+    <input id="nomeProfessor" placeholder="Nome do professor">
+    <div class="metric-grid" style="margin-top:12px;">
+      <div class="metric">
+        <div class="metric-title">Capacidade</div>
+        <div class="scale">
+          <span><input type="radio" name="cap" id="cap1" onchange="av.capacidade=1"><label for="cap1">1</label></span>
+          <span><input type="radio" name="cap" id="cap2" onchange="av.capacidade=2"><label for="cap2">2</label></span>
+          <span><input type="radio" name="cap" id="cap3" onchange="av.capacidade=3"><label for="cap3">3</label></span>
+          <span><input type="radio" name="cap" id="cap4" onchange="av.capacidade=4"><label for="cap4">4</label></span>
+          <span><input type="radio" name="cap" id="cap5" onchange="av.capacidade=5"><label for="cap5">5</label></span>
+        </div>
+      </div>
+      <div class="metric">
+        <div class="metric-title">Diversidade</div>
+        <div class="scale">
+          <span><input type="radio" name="div" id="div1" onchange="av.diversidade=1"><label for="div1">1</label></span>
+          <span><input type="radio" name="div" id="div2" onchange="av.diversidade=2"><label for="div2">2</label></span>
+          <span><input type="radio" name="div" id="div3" onchange="av.diversidade=3"><label for="div3">3</label></span>
+          <span><input type="radio" name="div" id="div4" onchange="av.diversidade=4"><label for="div4">4</label></span>
+          <span><input type="radio" name="div" id="div5" onchange="av.diversidade=5"><label for="div5">5</label></span>
+        </div>
+      </div>
+    </div>
+    <textarea placeholder="Comentários..." style="margin-top:12px;" onchange="av.observacoes=this.value"></textarea>
+    <button type="button" onclick="salvarAvaliacao()" style="margin-top:10px;">✅ Salvar Avaliação</button>
+  </div>
 
 </div>
 
+<!-- HISTÓRICO -->
+<div class="card" id="secaoHistorico">
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+    <h3 style="margin:0;">📚 Histórico de Planos</h3>
+    <button class="danger" style="width:auto; padding:8px 16px; font-size:13px;" onclick="limparHistorico()">🗑 Limpar tudo</button>
+  </div>
+  <div id="listaHistorico"></div>
 </div>
 
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-let av = {capacidade:0,diversidade:0,complexidade:0,relevancia:0,observacoes:""};
+let av = { capacidade: 0, diversidade: 0, complexidade: 0, relevancia: 0, observacoes: "" };
+let dadosAtualForm = {};
+let planoAtualTexto = "";
+let planoAtualHTML = "";
 
-async function verificarCache(){
+/* ── utils ── */
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2800);
+}
+
+/* ── cache check ── */
+async function verificarCache() {
   const ia = document.getElementById("ia").value;
   const topico = document.getElementById("topico").value;
-
-  const res = await fetch(`/topicos?ia=${ia}`);
-  const lista = await res.json();
-
-  const item = lista.find(t => t.topico === topico);
-
-  document.getElementById("status").innerText =
-    item && item.cache_existe ? "Cache disponível" : "Será gerado";
+  try {
+    const res = await fetch(`/topicos?ia=${ia}`);
+    const lista = await res.json();
+    const item = lista.find(t => t.topico === topico);
+    console.log(item && item.cache_existe ? "Cache disponível" : "Será gerado");
+  } catch(e) {}
 }
 
-// 🔥 remove vazamento entre seções
-function limparCampo(texto){
-  if(!texto) return "—";
-
-  return texto
-    .split(/Recursos didáticos:|Metodologia:|Atividade:|Avaliação:/)[0]
-    .trim();
+/* ── formatação ── */
+function limparCampo(texto) {
+  if (!texto) return "—";
+  return texto.split(/Recursos didáticos:|Metodologia:|Atividade:|Avaliação:/)[0].trim();
 }
 
-// 🔥 extrai cada seção corretamente
-function extrairSecao(texto, campo){
+function extrairSecao(texto, campo) {
   const regex = new RegExp(
-    campo + ":(.*?)(?=Conteúdo:|Recursos didáticos:|Metodologia:|Atividade:|Avaliação:|$)",
-    "s"
+    campo + ":(.*?)(?=Conteúdo:|Recursos didáticos:|Metodologia:|Atividade:|Avaliação:|$)", "s"
   );
-
   const match = texto.match(regex);
   return match ? limparCampo(match[1]) : "—";
 }
 
-// 🔥 transforma em lista
-function lista(texto){
-  if(!texto || texto === "—") return "<li>—</li>";
-
-  return texto
-    .split(/\.|\n|;/)
-    .map(t => t.trim())
-    .filter(t => t.length > 5)
-    .map(t => `<li>${t}</li>`)
-    .join("");
+function lista(texto) {
+  if (!texto || texto === "—") return "<li>—</li>";
+  return texto.split(/\.|\n|;/)
+    .map(t => t.trim()).filter(t => t.length > 5)
+    .map(t => `<li>${t}</li>`).join("");
 }
 
-// 🔥 função principal (MANTÉM ESSE NOME)
-function formatarPlano(texto){
-
+function formatarPlano(texto) {
   const partes = texto.split(/=== AULA (\d+) ===/g);
   let html = "";
-
-  for(let i=1;i<partes.length;i+=2){
-
-    const bloco = partes[i+1];
-
-    const conteudo = extrairSecao(bloco, "Conteúdo");
-    const recursos = extrairSecao(bloco, "Recursos didáticos");
+  for (let i = 1; i < partes.length; i += 2) {
+    const bloco = partes[i + 1];
+    const conteudo   = extrairSecao(bloco, "Conteúdo");
+    const recursos   = extrairSecao(bloco, "Recursos didáticos");
     const metodologia = extrairSecao(bloco, "Metodologia");
-    const atividade = extrairSecao(bloco, "Atividade");
-    const avaliacao = extrairSecao(bloco, "Avaliação");
-
+    const atividade  = extrairSecao(bloco, "Atividade");
+    const avaliacao  = extrairSecao(bloco, "Avaliação");
     html += `
       <div class="aula-card">
-
-        <div class="aula-header">
-          Aula ${partes[i]}
-        </div>
-
-        <div class="aula-section">
-          <h4>📘 Conteúdo</h4>
-          <ul>${lista(conteudo)}</ul>
-        </div>
-
-        <div class="aula-section">
-          <h4>🧰 Recursos</h4>
-          <ul>${lista(recursos)}</ul>
-        </div>
-
-        <div class="aula-section">
-          <h4>🎯 Metodologia</h4>
-          <ul>${lista(metodologia)}</ul>
-        </div>
-
-        <div class="aula-section">
-          <h4>📝 Atividade</h4>
-          <ul>${lista(atividade)}</ul>
-        </div>
-
-        <div class="aula-section">
-          <h4>✅ Avaliação</h4>
-          <ul>${lista(avaliacao)}</ul>
-        </div>
-
-      </div>
-    `;
+        <div class="aula-header">Aula ${partes[i]}</div>
+        <div class="aula-section"><h4>📘 Conteúdo</h4><ul>${lista(conteudo)}</ul></div>
+        <div class="aula-section"><h4>🧰 Recursos</h4><ul>${lista(recursos)}</ul></div>
+        <div class="aula-section"><h4>🎯 Metodologia</h4><ul>${lista(metodologia)}</ul></div>
+        <div class="aula-section"><h4>📝 Atividade</h4><ul>${lista(atividade)}</ul></div>
+        <div class="aula-section"><h4>✅ Avaliação</h4><ul>${lista(avaliacao)}</ul></div>
+      </div>`;
   }
-
   return html;
 }
 
-document.getElementById("form").addEventListener("submit", async function(e){
+/* ── submit ── */
+document.getElementById("form").addEventListener("submit", async function(e) {
   e.preventDefault();
-
-  const conteudo = document.getElementById("conteudo");
+  const conteudo  = document.getElementById("conteudo");
   const resultado = document.getElementById("resultado");
-
   resultado.style.display = "flex";
   conteudo.innerHTML = "Carregando...";
 
+  /* captura dados do form */
   const formData = new FormData(this);
-  const response = await fetch("/gerar",{method:"POST",body:formData});
+  dadosAtualForm = {};
+  for (const [k, v] of formData.entries()) {
+    if (k === "arquivo") {
+      dadosAtualForm["nomeArquivo"] = (v && v.name) ? v.name : "";
+    } else {
+      dadosAtualForm[k] = v;
+    }
+  }
 
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
+  planoAtualTexto = "";
+  planoAtualHTML  = "";
 
-  let buffer = "";
+  const response = await fetch("/gerar", { method: "POST", body: formData });
+  const reader   = response.body.getReader();
+  const decoder  = new TextDecoder();
 
-  while(true){
-    const {done,value} = await reader.read();
-    if(done) break;
-
-    buffer += decoder.decode(value);
-    conteudo.innerHTML = formatarPlano(buffer);
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    planoAtualTexto += decoder.decode(value);
+    planoAtualHTML   = formatarPlano(planoAtualTexto);
+    conteudo.innerHTML = planoAtualHTML;
   }
 });
-function limparTexto(texto) {
-  return texto
-    .replace(/[^\x00-\x7FÀ-ÿ\n ]/g, "")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
+
+/* ── avaliação: salva CSV + JSON ── */
+function salvarAvaliacao() {
+  if (!planoAtualTexto) { showToast("Gere um plano primeiro."); return; }
+  av.professor   = document.getElementById("nomeProfessor").value;
+  av.observacoes = document.querySelector("textarea[placeholder='Comentários...']").value;
+
+  const inp = dadosAtualForm;
+
+  /* extrai seções de cada aula do texto bruto */
+  const partes = planoAtualTexto.split(/=== AULA (\d+) ===/g);
+  const aulas = [];
+  for (let i = 1; i < partes.length; i += 2) {
+    const num   = partes[i];
+    const bloco = partes[i + 1] || "";
+    aulas.push({
+      numero:      num,
+      conteudo:    extrairSecao(bloco, "Conteúdo"),
+      recursos:    extrairSecao(bloco, "Recursos didáticos"),
+      metodologia: extrairSecao(bloco, "Metodologia"),
+      atividade:   extrairSecao(bloco, "Atividade"),
+      avaliacao:   extrairSecao(bloco, "Avaliação")
+    });
+  }
+
+  const topSlug = (inp.topico || "plano").replace(/\s+/g, "_").toLowerCase();
+  const ts      = Date.now();
+
+  /* ── 1. CSV ── */
+  const linhasCSV = [];
+
+  linhasCSV.push(["Campo", "Valor"]);
+  linhasCSV.push(["Disciplina",        inp.disciplina    || ""]);
+  linhasCSV.push(["Curso",             inp.curso         || ""]);
+  linhasCSV.push(["Carga Horária",     inp.carga         || ""]);
+  linhasCSV.push(["Número de Aulas",   inp.qtd_aulas     || ""]);
+  linhasCSV.push(["Duração",           inp.duracao       || ""]);
+  linhasCSV.push(["Ementa",            inp.ementa        || ""]);
+  linhasCSV.push(["Objetivo",          inp.objetivo      || ""]);
+  linhasCSV.push(["Nome do Livro/PDF", inp.nomeArquivo   || ""]);
+  linhasCSV.push(["Modelo IA",         inp.ia            || ""]);
+  linhasCSV.push(["Tópico",            inp.topico        || ""]);
+  linhasCSV.push([]);
+
+  aulas.forEach(a => {
+    linhasCSV.push([`Aula ${a.numero}`, ""]);
+    linhasCSV.push(["Conteúdo",           a.conteudo]);
+    linhasCSV.push(["Recursos didáticos", a.recursos]);
+    linhasCSV.push(["Metodologia",        a.metodologia]);
+    linhasCSV.push(["Atividade",          a.atividade]);
+    linhasCSV.push(["Avaliação",          a.avaliacao]);
+    linhasCSV.push([]);
+  });
+
+  linhasCSV.push(["Avaliação do Professor", ""]);
+  linhasCSV.push(["Nome do Professor", av.professor   || ""]);
+  linhasCSV.push(["Capacidade",        av.capacidade  || ""]);
+  linhasCSV.push(["Diversidade",       av.diversidade || ""]);
+  linhasCSV.push(["Observações",       av.observacoes || ""]);
+
+  function escCSV(v) {
+    const s = String(v == null ? "" : v).replace(/"/g, '""');
+    return /[,"\n\r]/.test(s) ? `"${s}"` : s;
+  }
+  const csvStr = "\uFEFF" + linhasCSV.map(r => r.map(escCSV).join(",")).join("\r\n");
+
+  const blobCSV = new Blob([csvStr], { type: "text/csv;charset=utf-8;" });
+  const urlCSV  = URL.createObjectURL(blobCSV);
+  const aCSV    = document.createElement("a");
+  aCSV.href     = urlCSV;
+  aCSV.download = `plano_${topSlug}_${ts}.csv`;
+  aCSV.click();
+  URL.revokeObjectURL(urlCSV);
+
+  /* ── 2. JSON ── */
+  const registro = {
+    id: ts,
+    geradoEm: new Date().toISOString(),
+    inputs: {
+      disciplina:  inp.disciplina  || "",
+      curso:       inp.curso       || "",
+      carga:       inp.carga       || "",
+      qtd_aulas:   inp.qtd_aulas   || "",
+      duracao:     inp.duracao     || "",
+      ementa:      inp.ementa      || "",
+      objetivo:    inp.objetivo    || "",
+      nomeArquivo: inp.nomeArquivo || "",
+      modelo:      inp.ia          || "",
+      topico:      inp.topico      || ""
+    },
+    plano: {
+      aulas: aulas,
+      textoRaw: planoAtualTexto
+    },
+    avaliacaoProfessor: {
+      nome:        av.professor   || "",
+      capacidade:  av.capacidade  || 0,
+      diversidade: av.diversidade || 0,
+      observacoes: av.observacoes || ""
+    }
+  };
+
+  const blobJSON = new Blob([JSON.stringify(registro, null, 2)], { type: "application/json" });
+  const urlJSON  = URL.createObjectURL(blobJSON);
+  const aJSON    = document.createElement("a");
+  aJSON.href     = urlJSON;
+  aJSON.download = `plano_${topSlug}_${ts}.json`;
+  aJSON.click();
+  URL.revokeObjectURL(urlJSON);
+
+  showToast("CSV e JSON salvos!");
 }
+
+/* ── montar objeto completo ── */
+function montarRegistro() {
+  return {
+    id: Date.now(),
+    geradoEm: new Date().toISOString(),
+    inputs: dadosAtualForm,
+    plano: {
+      textoRaw: planoAtualTexto,
+      html: planoAtualHTML
+    },
+    avaliacao: {
+      professor: document.getElementById("nomeProfessor").value,
+      capacidade: av.capacidade,
+      diversidade: av.diversidade,
+      observacoes: av.observacoes
+    }
+  };
+}
+
+/* ── baixar JSON ── */
+function baixarJSON() {
+  if (!planoAtualTexto) { showToast("Gere um plano primeiro."); return; }
+  const registro = montarRegistro();
+  const blob = new Blob([JSON.stringify(registro, null, 2)], { type: "application/json" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  const topico = dadosAtualForm.topico || "plano";
+  a.href     = url;
+  a.download = `plano_${topico.replace(/\s+/g, "_").toLowerCase()}_${registro.id}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast("JSON baixado com sucesso!");
+}
+
+/* ── salvar no histórico (localStorage) ── */
+function salvarNoHistorico() {
+  if (!planoAtualTexto) { showToast("Gere um plano primeiro."); return; }
+  const registro  = montarRegistro();
+  const historico = JSON.parse(localStorage.getItem("planos_historico") || "[]");
+  historico.unshift(registro);
+  localStorage.setItem("planos_historico", JSON.stringify(historico));
+  renderHistorico();
+  showToast("Plano salvo no histórico!");
+}
+
+/* ── renderizar histórico ── */
+function renderHistorico() {
+  const historico = JSON.parse(localStorage.getItem("planos_historico") || "[]");
+  const lista     = document.getElementById("listaHistorico");
+
+  if (historico.length === 0) {
+    lista.innerHTML = '<div class="empty-state">Nenhum plano salvo ainda.</div>';
+    return;
+  }
+
+  lista.innerHTML = historico.map(r => {
+    const data  = new Date(r.geradoEm).toLocaleString("pt-BR");
+    const topico = r.inputs?.topico || "—";
+    const ia     = r.inputs?.ia?.toUpperCase() || "—";
+    const prof   = r.avaliacao?.professor ? ` · Prof. ${r.avaliacao.professor}` : "";
+    const cap    = r.avaliacao?.capacidade ? ` · Cap: ${r.avaliacao.capacidade}/5` : "";
+    const div    = r.avaliacao?.diversidade ? ` · Div: ${r.avaliacao.diversidade}/5` : "";
+    return `
+      <div class="historico-card">
+        <div class="historico-info">
+          <div class="historico-titulo">${topico} <span class="badge-ia">${ia}</span></div>
+          <div class="historico-meta">${data}${prof}${cap}${div}</div>
+        </div>
+        <div class="historico-acoes">
+          <button class="secondary" onclick="verPlano(${r.id})">👁 Ver</button>
+          <button class="secondary" onclick="exportarRegistroJSON(${r.id})">💾 JSON</button>
+          <button class="secondary" onclick="exportarRegistroPDF(${r.id})">📄 PDF</button>
+          <button class="danger"    onclick="removerRegistro(${r.id})">🗑</button>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+/* ── ver plano do histórico ── */
+function verPlano(id) {
+  const historico = JSON.parse(localStorage.getItem("planos_historico") || "[]");
+  const r = historico.find(x => x.id === id);
+  if (!r) return;
+  dadosAtualForm   = r.inputs;
+  planoAtualTexto  = r.plano.textoRaw;
+  planoAtualHTML   = r.plano.html;
+  av = { ...r.avaliacao };
+
+  document.getElementById("conteudo").innerHTML = planoAtualHTML;
+  document.getElementById("resultado").style.display = "flex";
+  document.getElementById("nomeProfessor").value = r.avaliacao?.professor || "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  showToast("Plano carregado do histórico.");
+}
+
+/* ── exportar JSON de registro histórico ── */
+function exportarRegistroJSON(id) {
+  const historico = JSON.parse(localStorage.getItem("planos_historico") || "[]");
+  const r = historico.find(x => x.id === id);
+  if (!r) return;
+  const blob = new Blob([JSON.stringify(r, null, 2)], { type: "application/json" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href     = url;
+  a.download = `plano_${(r.inputs?.topico||"").replace(/\s+/g,"_").toLowerCase()}_${r.id}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast("JSON exportado!");
+}
+
+/* ── remover do histórico ── */
+function removerRegistro(id) {
+  let historico = JSON.parse(localStorage.getItem("planos_historico") || "[]");
+  historico = historico.filter(x => x.id !== id);
+  localStorage.setItem("planos_historico", JSON.stringify(historico));
+  renderHistorico();
+  showToast("Registro removido.");
+}
+
+/* ── limpar todo o histórico ── */
+function limparHistorico() {
+  if (!confirm("Deseja apagar todo o histórico de planos?")) return;
+  localStorage.removeItem("planos_historico");
+  renderHistorico();
+  showToast("Histórico apagado.");
+}
+
+/* ── baixar PDF do atual ── */
 function baixarPDF() {
+  gerarPDF(document.getElementById("conteudo"), dadosAtualForm?.topico || "plano");
+}
+
+/* ── baixar PDF de registro histórico ── */
+function exportarRegistroPDF(id) {
+  const historico = JSON.parse(localStorage.getItem("planos_historico") || "[]");
+  const r = historico.find(x => x.id === id);
+  if (!r) return;
+  const tmp = document.createElement("div");
+  tmp.innerHTML = r.plano.html;
+  gerarPDF(tmp, r.inputs?.topico || "plano");
+}
+
+/* ── gerador PDF unificado ── */
+function gerarPDF(containerEl, topicoNome) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-
-  const conteudo = document.getElementById("conteudo");
-
   let y = 20;
-
   const margemX = 15;
   const largura = 180;
 
   doc.setFont("times", "bold");
   doc.setFontSize(16);
   doc.text("PLANO DE AULA", 105, y, { align: "center" });
-
   y += 12;
 
-  const texto = conteudo.innerText
+  const texto = containerEl.innerText
     .replace(/[^\x20-\x7EÀ-ÿ\n\r]/g, "")
     .replace(/\n{2,}/g, "\n");
 
   const aulas = texto.split(/\n(?=Aula\s\d+)/g);
 
   aulas.forEach((aula, index) => {
-
-    // 🔥 NOVA PÁGINA PARA CADA AULA
-    if (index > 0) {
-      doc.addPage();
-      y = 20;
-    }
-
+    if (index > 0) { doc.addPage(); y = 20; }
     const linhas = aula.split("\n");
-
     linhas.forEach(linha => {
-
-      if (y > 280) {
-        doc.addPage();
-        y = 20;
-      }
-
+      if (y > 280) { doc.addPage(); y = 20; }
       const textoLimpo = linha.trim();
       if (!textoLimpo) return;
-
-      // 🔥 TÍTULO AULA EM NEGRITO
       if (textoLimpo.startsWith("Aula")) {
-        doc.setFont("times", "bold");
-        doc.setFontSize(14);
-        y += 2;
+        doc.setFont("times", "bold"); doc.setFontSize(14); y += 2;
+      } else if (["CONTEÚDO","RECURSOS","METODOLOGIA","ATIVIDADE","AVALIAÇÃO"].includes(textoLimpo)) {
+        doc.setFont("times", "bold"); doc.setFontSize(12); y += 3;
+      } else {
+        doc.setFont("times", "normal"); doc.setFontSize(11);
       }
-
-      // 🔥 SEÇÕES EM NEGRITO
-      else if (
-        textoLimpo === "CONTEÚDO" ||
-        textoLimpo === "RECURSOS" ||
-        textoLimpo === "METODOLOGIA" ||
-        textoLimpo === "ATIVIDADE" ||
-        textoLimpo === "AVALIAÇÃO"
-      ) {
-        doc.setFont("times", "bold");
-        doc.setFontSize(12);
-        y += 3;
-      }
-
-      // 🔥 TEXTO NORMAL
-      else {
-        doc.setFont("times", "normal");
-        doc.setFontSize(11);
-      }
-
       const quebrado = doc.splitTextToSize(textoLimpo, largura);
       doc.text(quebrado, margemX, y);
       y += quebrado.length * 6 + 2;
     });
   });
 
-  doc.save("plano_de_aula.pdf");
+  doc.save(`plano_${topicoNome.replace(/\s+/g, "_").toLowerCase()}.pdf`);
+  showToast("PDF gerado com sucesso!");
 }
 
+/* ── inicializar histórico ao carregar ── */
+renderHistorico();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
