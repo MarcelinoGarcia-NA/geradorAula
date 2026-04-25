@@ -1,178 +1,195 @@
 import os
 from openai import OpenAI
 import anthropic
-import re
-
-def gerar_plano_stream(dados, quantidade, ia="gpt"):
-
-    # ================= LIVRO (CORRIGIDO) =================
-    texto_pdf = dados.get("texto_arquivo", "")
-
-    livro_nome = None
-    capitulos = []
-
-    if texto_pdf:
-        linhas = texto_pdf.split("\n")
-
-        for linha in linhas[:80]:
-            linha = linha.strip()
-
-            # tenta pegar algo que pareça título de livro/capítulo
-            if 10 < len(linha) < 120:
-                if (
-                    "capítulo" in linha.lower()
-                    or re.match(r"^\d+[\.\-]", linha)
-                    or "introdução" in linha.lower()
-                ):
-                    capitulos.append(linha)
-
-        # tenta inferir "nome do livro" como primeira linha relevante
-        for linha in linhas[:50]:
-            linha = linha.strip()
-            if 10 < len(linha) < 120 and not linha.lower().startswith("plano"):
-                livro_nome = linha
-                break
-
-    capitulos_texto = "\n".join(capitulos[:50]) if capitulos else "NÃO IDENTIFICADO"
-
-    contexto_extra = texto_pdf[:6000]
 
 
-    # ================= PROMPT =================
+# =========================
+# 🔍 MINI-RAG (RELEVÂNCIA SIMPLES)
+# =========================
+def extrair_trechos_relevantes(texto, topico, limite=10):
+    paragrafos = texto.split("\n")
+    relevantes = []
+
+    for p in paragrafos:
+        if topico.lower() in p.lower():
+            relevantes.append(p.strip())
+
+    # fallback: pega primeiros parágrafos se não achar nada
+    if not relevantes:
+        relevantes = paragrafos[:limite]
+
+    return "\n".join(relevantes[:limite])
+
+
+# =========================
+# 🚀 GERADOR COM STREAM
+# =========================
+def gerar_plano_stream(dados, topico, ia="gpt", texto_pdf=""):
+
+    disciplina = dados.get("disciplina", "")
+    curso = dados.get("curso", "")
+    carga = dados.get("carga", "")
+    objetivo = dados.get("objetivo", "")
+    ementa = dados.get("ementa", "")
+
+    # =========================
+    # 🔥 CONTEXTO INTELIGENTE
+    # =========================
+    contexto = ""
+
+    if texto_pdf and texto_pdf.strip():
+        texto_relevante = extrair_trechos_relevantes(texto_pdf, topico)
+
+        contexto = f"""
+=== MATERIAL DE REFERÊNCIA (USO OBRIGATÓRIO) ===
+{texto_relevante}
+=== FIM DO MATERIAL ===
+"""
+
+    # =========================
+    # 🧠 PROMPT FORTE (GROUNDING REAL)
+    # =========================
     prompt = f"""
-  Você é um especialista em design instrucional para ensino superior em Ciência da Computação.
+You are a highly experienced university professor in Computer Science.
 
-Sua tarefa é gerar um plano de ensino completo para a disciplina de {dados.get('disciplina')} do curso {dados.get('curso')}.
+Your task is to generate a BEGINNER-level teaching plan.
 
----
+This is a controlled experiment with EXACTLY 3 lessons.
 
-## CONTEXTO DA DISCIPLINA
-- Disciplina: {dados.get('disciplina')}
-- Curso: {dados.get('curso')}
-- Carga horária: {dados.get('carga')}
-- Número de aulas: {dados.get('qtd_aulas')}
-- Ementa: {dados.get('ementa')}
-- Objetivo: {dados.get('objetivo')}
+Each lesson MUST correspond to ONE fixed topic:
 
----
+1. {topico}
+2. {topico}
+3. {topico}
 
-## LIVRO BASE (OBRIGATÓRIO E CRÍTICO)
+==================================================
+STRICT CONTENT RULES
+==================================================
 
-O texto abaixo é o conteúdo REAL do livro enviado pelo usuário.
+- Generate EXACTLY 3 lessons
+- Each lesson uses ONLY the given topic
+- Do NOT introduce new topics
+- Do NOT mix topics
+- Keep content beginner-level
 
-VOCÊ DEVE:
-- Ler o conteúdo do PDF
-- Identificar títulos de capítulos REAIS (quando existirem)
-- NÃO inventar capítulos
-- NÃO usar "Capítulo 1" genérico se não existir no texto
-- NÃO repetir o mesmo capítulo para todas as aulas
+==================================================
+CRITICAL STRUCTURE RULES (HARD CONSTRAINTS)
+==================================================
 
-REGRAS IMPORTANTES:
-1. Extraia os capítulos diretamente do texto do PDF
-2. Use trechos que pareçam títulos (ex: linhas curtas, iniciando com "Capítulo", números, headings)
-3. Cada aula deve obrigatoriamente referenciar UM capítulo real do PDF
-4. Os capítulos devem ser distribuídos de forma coerente com o conteúdo da aula
-5. Se não encontrar capítulos claros, agrupe por seções temáticas reais do texto (NUNCA invente)
+You MUST follow the structure EXACTLY.
 
-FORMATO OBRIGATÓRIO:
-Livro: {dados.get("texto_arquivo","Livro enviado pelo usuário")}
-Capítulo: [TÍTULO REAL EXTRAÍDO DO TEXTO DO PDF]
+Each lesson MUST contain EXACTLY these fields:
 
----
+Conteúdo:
+Recursos didáticos:
+Metodologia:
+Atividade:
+Avaliação:
 
-## CONTEXTO DO LIVRO (TEXTO BRUTO)
-{dados.get("texto_arquivo","")}
+--------------------------------------------------
 
----
+🚫 FORBIDDEN BEHAVIOR:
 
-## INSTRUÇÃO PRINCIPAL
+- NEVER include "Recursos didáticos:" inside "Conteúdo"
+- NEVER include "Metodologia:" inside "Conteúdo"
+- NEVER include "Atividade:" inside "Conteúdo"
+- NEVER include "Avaliação:" inside "Conteúdo"
 
-Gere EXATAMENTE {dados.get('qtd_aulas')} aulas.
+- NEVER repeat any section
+- NEVER merge sections
+- NEVER embed one section inside another
 
-Cada aula deve conter:
+If ANY section appears inside another → OUTPUT IS INVALID
 
-- Conteúdo (baseado na ementa + livro)
-- Recursos didáticos
-- Livro
-- Capítulo (OBRIGATORIAMENTE relacionado ao conteúdo da aula)
-- Metodologia
-- Atividade
-- Avaliação formativa
+--------------------------------------------------
 
----
+✅ REQUIRED BEHAVIOR:
 
-## FORMATO OBRIGATÓRIO DE SAÍDA
+- Each section must contain ONLY its own content
+- Each section must appear ONLY ONCE per lesson
+- Keep sections clearly separated
+
+==================================================
+CONTEXT (USE WHEN AVAILABLE)
+==================================================
+
+Disciplina: {disciplina}
+Curso: {curso}
+Carga horária: {carga}
+Objetivo: {objetivo}
+Ementa: {ementa}
+
+{contexto}
+
+==================================================
+OUTPUT LANGUAGE
+==================================================
+
+Brazilian Portuguese (pt-BR)
+
+==================================================
+OUTPUT FORMAT (STRICT)
+==================================================
 
 PLANO DE ENSINO
 
 === AULA 1 ===
 Conteúdo:
 Recursos didáticos:
-Livro:
-Capítulo:
 Metodologia:
 Atividade:
 Avaliação:
 
-(repita exatamente até a última aula)
+=== AULA 2 ===
+Conteúdo:
+Recursos didáticos:
+Metodologia:
+Atividade:
+Avaliação:
 
----
+=== AULA 3 ===
+Conteúdo:
+Recursos didáticos:
+Metodologia:
+Atividade:
+Avaliação:
 
-## AVALIAÇÕES
+==================================================
+FINAL RULE
+==================================================
 
-Avaliação 1:
-Tipo:
-Descrição:
-Critérios:
-Peso:
-
-Avaliação 2:
-Tipo:
-Descrição:
-Critérios:
-Peso:
-
-Avaliação opcional:
-Tipo:
-Descrição:
-Critérios:
-Peso:
-
----
-
-## REGRA FINAL (CRÍTICA)
-- Não usar markdown
-- Não inventar capítulos
-- Não repetir capítulos sem necessidade
-- Não quebrar o formato
-- Cada aula deve ter conexão lógica com um capítulo real do texto do PDF
+If you do not follow ALL rules above EXACTLY, your answer is INVALID.
 """
 
-    # ================= GPT =================
+    # =====================
+    # 🤖 GPT
+    # =====================
     if ia == "gpt":
         client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
         stream = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
-            temperature=0.5,
-            max_completion_tokens=3000,
             stream=True
         )
 
         for chunk in stream:
-            yield chunk.choices[0].delta.content or ""
+            content = chunk.choices[0].delta.content
+            if content:
+                yield content
 
-    # ================= CLAUDE =================
-    elif ia == "claude":
-        client = anthropic.Anthropic(
-            api_key=os.environ["ANTHROPIC_API_KEY"]
-        )
+    # =====================
+    # 🤖 CLAUDE
+    # =====================
+    else:
+        client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
         with client.messages.stream(
             model="claude-opus-4-7",
-            max_tokens=3000,
-            messages=[{"role": "user", "content": prompt}],
+            max_tokens=4000,
+            messages=[{"role": "user", "content": prompt}]
         ) as stream:
-            for text in stream.text_stream:
-                yield text
+
+            for event in stream:
+                if event.type == "content_block_delta":
+                    yield event.delta.text or ""
