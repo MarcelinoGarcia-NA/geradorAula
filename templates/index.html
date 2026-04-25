@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="pt-br">
 
 <head>
@@ -25,9 +25,7 @@ body {
   text-align: center;
 }
 
-.step {
-  flex: 1;
-}
+.step { flex: 1; }
 
 .step-circle {
   width: 35px;
@@ -55,9 +53,7 @@ body {
   margin-bottom: 15px;
 }
 
-.col {
-  flex: 1;
-}
+.col { flex: 1; }
 
 input, textarea, select {
   width: 100%;
@@ -67,9 +63,7 @@ input, textarea, select {
   margin-top: 5px;
 }
 
-textarea {
-  resize: vertical;
-}
+textarea { resize: vertical; }
 
 button {
   width: 100%;
@@ -82,22 +76,11 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  opacity: 0.9;
-}
+button:hover { opacity: 0.9; }
 
-.resultado-container {
-  display: none;
-  gap: 20px;
-}
-
-.resultado-left {
-  flex: 1.2;
-}
-
-.resultado-right {
-  flex: 1;
-}
+.resultado-container { display: none; gap: 20px; }
+.resultado-left { flex: 1.2; }
+.resultado-right { flex: 1; }
 
 .plano-box {
   background: #fafafa;
@@ -124,10 +107,8 @@ button:hover {
 .metric-title {
   font-weight: 600;
   margin-bottom: 8px;
-  color: #333;
 }
 
-/* escala */
 .scale {
   display: flex;
   justify-content: space-between;
@@ -142,55 +123,65 @@ button:hover {
   cursor: pointer;
   border: 1px solid #ddd;
   background: white;
-  transition: 0.2s;
-  font-size: 14px;
 }
 
-.scale input {
-  display: none;
-}
+.scale input { display: none; }
 
-/* estado selecionado */
 .scale input:checked + label {
   background: #6c5ce7;
   color: white;
-  border-color: #6c5ce7;
-}
-label {
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  font-weight: 500;
 }
 
-input,
-textarea,
-select {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  margin-bottom: 14px; /* 🔥 aqui resolve o “colado” */
-  box-sizing: border-box;
-}
-
-.aula {
+.aula-card {
   background: white;
-  border-left: 6px solid #6c5ce7;
-  padding: 15px;
+  border-radius: 14px;
+  padding: 20px;
   margin-bottom: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  border-left: 6px solid #6c5ce7;
 }
 
-.aula h2 {
-  margin-top: 0;
+.aula-header {
+  font-size: 20px;
+  font-weight: bold;
   color: #6c5ce7;
+  margin-bottom: 15px;
 }
 
-h4 {
-  margin-bottom: 5px;
+.aula-section {
+  margin-bottom: 14px;
+}
+
+.aula-section h4 {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.aula-section p {
+  margin: 0;
+  line-height: 1.6;
   color: #333;
+}
+
+/* melhora leitura */
+.aula-section p {
+  white-space: pre-line;
+}
+
+ul, li {
+  page-break-inside: avoid;
+}
+.aula-card {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  margin-bottom: 10mm;
+}
+
+#conteudo {
+  display: block;
 }
 </style>
 </head>
@@ -215,49 +206,46 @@ h4 {
 <div class="row">
   <div class="col">
     <label>Disciplina</label>
-    <input name="disciplina" placeholder="Ex: Programação Orientada a Objetos" required>
+    <input value="Algoritmos e Lógica de Programação" readonly>
+    <input type="hidden" name="disciplina" value="Algoritmos e Lógica de Programação">
   </div>
 
   <div class="col">
     <label>Curso</label>
-    <input name="curso" placeholder="Ex: Ciência da Computação" required>
+    <input value="Ciência da Computação" readonly>
+    <input type="hidden" name="curso" value="Ciência da Computação">
   </div>
 </div>
 
 <div class="row">
   <div class="col">
     <label>Carga Horária</label>
-    <input name="carga" placeholder="Ex: 60h">
+    <input value="60h" readonly>
+    <input type="hidden" name="carga" value="60h">
   </div>
 
   <div class="col">
     <label>Número de Aulas</label>
-    <input name="qtd_aulas" placeholder="Ex: 16" value="16">
+    <input value="3" readonly>
+    <input type="hidden" name="qtd_aulas" value="3">
   </div>
 
   <div class="col">
-    <label>Duração por Aula</label>
-    <input name="duracao" placeholder="Ex: 2h">
+    <label>Duração</label>
+    <input value="1h30" readonly>
+    <input type="hidden" name="duracao" value="1h30">
   </div>
 </div>
 
 <label>Ementa</label>
-<textarea name="ementa" placeholder="Ex: Classes, objetos, encapsulamento, herança, polimorfismo, LINQ..."></textarea>
+<textarea readonly>Variáveis, tipos de dados, estruturas condicionais e repetição.</textarea>
+<input type="hidden" name="ementa" value="Variáveis, tipos de dados, estruturas condicionais e repetição.">
 
 <label>Objetivo</label>
-<textarea name="objetivo" placeholder="Ex: Desenvolver sistemas utilizando POO em C#"></textarea>
+<textarea readonly>Introduzir conceitos básicos de programação para iniciantes.</textarea>
+<input type="hidden" name="objetivo" value="Introduzir conceitos básicos de programação para iniciantes.">
 
-<!-- ✅ INPUT DE ARQUIVO -->
-<label>Arquivo PDF (opcional)</label>
-<input type="file" name="arquivo" accept="application/pdf">
-
-<label>Modelo de IA</label>
-<select name="ia">
-  <option value="gpt">GPT</option>
-  <option value="claude">Claude</option>
-</select>
-
-<br><br>
+<label>Arquivo PDF</label> <input type="file" name="arquivo"> <div class="row"> <div class="col"> <label>Modelo</label> <select name="ia" id="ia" onchange="verificarCache()"> <option value="gpt">GPT</option> <option value="claude">Claude</option> </select> </div> <div class="col"> <label>Tópico</label> <select name="topico" id="topico" onchange="verificarCache()"> <option>Variáveis e tipos de dados</option> <option>Estruturas condicionais</option> <option>Estruturas de repetição</option> </select> </div> </div>
 
 <button type="submit">🚀 Gerar Plano</button>
 
@@ -269,6 +257,7 @@ h4 {
 
 <div class="resultado-left card">
 <h3>Plano Gerado</h3>
+<button type="button" onclick="baixarPDF()">📄 Baixar PDF</button>
 <div id="conteudo" class="plano-box"></div>
 </div>
 
@@ -277,62 +266,35 @@ h4 {
 
 <input id="nomeProfessor" placeholder="Nome do professor">
 
+<div class="metric-grid">
+
 <div class="metric">
-    <div class="metric-title">Capacidade</div>
-    <div class="scale">
-      <input type="radio" name="capacidade" id="c1" onclick="av.capacidade=1"><label for="c1">1</label>
-      <input type="radio" name="capacidade" id="c2" onclick="av.capacidade=2"><label for="c2">2</label>
-      <input type="radio" name="capacidade" id="c3" onclick="av.capacidade=3"><label for="c3">3</label>
-      <input type="radio" name="capacidade" id="c4" onclick="av.capacidade=4"><label for="c4">4</label>
-      <input type="radio" name="capacidade" id="c5" onclick="av.capacidade=5"><label for="c5">5</label>
-    </div>
-  </div>
+<div class="metric-title">Capacidade</div>
+<div class="scale">
+<input type="radio" name="cap" onclick="av.capacidade=1"><label>1</label>
+<input type="radio" name="cap" onclick="av.capacidade=2"><label>2</label>
+<input type="radio" name="cap" onclick="av.capacidade=3"><label>3</label>
+<input type="radio" name="cap" onclick="av.capacidade=4"><label>4</label>
+<input type="radio" name="cap" onclick="av.capacidade=5"><label>5</label>
+</div>
+</div>
 
-  <!-- Diversidade -->
-  <div class="metric">
-    <div class="metric-title">Diversidade</div>
-    <div class="scale">
-      <input type="radio" name="diversidade" id="d1" onclick="av.diversidade=1"><label for="d1">1</label>
-      <input type="radio" name="diversidade" id="d2" onclick="av.diversidade=2"><label for="d2">2</label>
-      <input type="radio" name="diversidade" id="d3" onclick="av.diversidade=3"><label for="d3">3</label>
-      <input type="radio" name="diversidade" id="d4" onclick="av.diversidade=4"><label for="d4">4</label>
-      <input type="radio" name="diversidade" id="d5" onclick="av.diversidade=5"><label for="d5">5</label>
-    </div>
-  </div>
+<div class="metric">
+<div class="metric-title">Diversidade</div>
+<div class="scale">
+<input type="radio" onclick="av.diversidade=1"><label>1</label>
+<input type="radio" onclick="av.diversidade=2"><label>2</label>
+<input type="radio" onclick="av.diversidade=3"><label>3</label>
+<input type="radio" onclick="av.diversidade=4"><label>4</label>
+<input type="radio" onclick="av.diversidade=5"><label>5</label>
+</div>
+</div>
 
-  <!-- Complexidade -->
-  <div class="metric">
-    <div class="metric-title">Complexidade</div>
-    <div class="scale">
-      <input type="radio" name="complexidade" id="co1" onclick="av.complexidade=1"><label for="co1">1</label>
-      <input type="radio" name="complexidade" id="co2" onclick="av.complexidade=2"><label for="co2">2</label>
-      <input type="radio" name="complexidade" id="co3" onclick="av.complexidade=3"><label for="co3">3</label>
-      <input type="radio" name="complexidade" id="co4" onclick="av.complexidade=4"><label for="co4">4</label>
-      <input type="radio" name="complexidade" id="co5" onclick="av.complexidade=5"><label for="co5">5</label>
-    </div>
-  </div>
+</div>
 
-  <!-- Relevância -->
-  <div class="metric">
-    <div class="metric-title">Relevância</div>
-    <div class="scale">
-      <input type="radio" name="relevancia" id="r1" onclick="av.relevancia=1"><label for="r1">1</label>
-      <input type="radio" name="relevancia" id="r2" onclick="av.relevancia=2"><label for="r2">2</label>
-      <input type="radio" name="relevancia" id="r3" onclick="av.relevancia=3"><label for="r3">3</label>
-      <input type="radio" name="relevancia" id="r4" onclick="av.relevancia=4"><label for="r4">4</label>
-      <input type="radio" name="relevancia" id="r5" onclick="av.relevancia=5"><label for="r5">5</label>
-    </div>
-  </div>
+<textarea placeholder="Comentários..." onchange="av.observacoes=this.value"></textarea>
 
-<br>
-
-<label>
-Comentários
-</label>
-
-<textarea placeholder="Observações..." onchange="av.observacoes=this.value"></textarea>
-
-<button type="button" onclick="salvar()">📊 Salvar Avaliação</button>
+<button type="button" onclick="salvar()">Salvar</button>
 
 </div>
 
@@ -341,116 +303,218 @@ Comentários
 </div>
 
 <script>
-let av = {
-  fluidez:0,
-  capacidade:0,
-  diversidade:0,
-  complexidade:0,
-  relevancia:0,
-  incompleta:false,
-  observacoes:""
-};
+let av = {capacidade:0,diversidade:0,complexidade:0,relevancia:0,observacoes:""};
+
+async function verificarCache(){
+  const ia = document.getElementById("ia").value;
+  const topico = document.getElementById("topico").value;
+
+  const res = await fetch(`/topicos?ia=${ia}`);
+  const lista = await res.json();
+
+  const item = lista.find(t => t.topico === topico);
+
+  document.getElementById("status").innerText =
+    item && item.cache_existe ? "Cache disponível" : "Será gerado";
+}
+
+// 🔥 remove vazamento entre seções
+function limparCampo(texto){
+  if(!texto) return "—";
+
+  return texto
+    .split(/Recursos didáticos:|Metodologia:|Atividade:|Avaliação:/)[0]
+    .trim();
+}
+
+// 🔥 extrai cada seção corretamente
+function extrairSecao(texto, campo){
+  const regex = new RegExp(
+    campo + ":(.*?)(?=Conteúdo:|Recursos didáticos:|Metodologia:|Atividade:|Avaliação:|$)",
+    "s"
+  );
+
+  const match = texto.match(regex);
+  return match ? limparCampo(match[1]) : "—";
+}
+
+// 🔥 transforma em lista
+function lista(texto){
+  if(!texto || texto === "—") return "<li>—</li>";
+
+  return texto
+    .split(/\.|\n|;/)
+    .map(t => t.trim())
+    .filter(t => t.length > 5)
+    .map(t => `<li>${t}</li>`)
+    .join("");
+}
+
+// 🔥 função principal (MANTÉM ESSE NOME)
+function formatarPlano(texto){
+
+  const partes = texto.split(/=== AULA (\d+) ===/g);
+  let html = "";
+
+  for(let i=1;i<partes.length;i+=2){
+
+    const bloco = partes[i+1];
+
+    const conteudo = extrairSecao(bloco, "Conteúdo");
+    const recursos = extrairSecao(bloco, "Recursos didáticos");
+    const metodologia = extrairSecao(bloco, "Metodologia");
+    const atividade = extrairSecao(bloco, "Atividade");
+    const avaliacao = extrairSecao(bloco, "Avaliação");
+
+    html += `
+      <div class="aula-card">
+
+        <div class="aula-header">
+          Aula ${partes[i]}
+        </div>
+
+        <div class="aula-section">
+          <h4>📘 Conteúdo</h4>
+          <ul>${lista(conteudo)}</ul>
+        </div>
+
+        <div class="aula-section">
+          <h4>🧰 Recursos</h4>
+          <ul>${lista(recursos)}</ul>
+        </div>
+
+        <div class="aula-section">
+          <h4>🎯 Metodologia</h4>
+          <ul>${lista(metodologia)}</ul>
+        </div>
+
+        <div class="aula-section">
+          <h4>📝 Atividade</h4>
+          <ul>${lista(atividade)}</ul>
+        </div>
+
+        <div class="aula-section">
+          <h4>✅ Avaliação</h4>
+          <ul>${lista(avaliacao)}</ul>
+        </div>
+
+      </div>
+    `;
+  }
+
+  return html;
+}
 
 document.getElementById("form").addEventListener("submit", async function(e){
   e.preventDefault();
 
-  const resultado = document.getElementById("resultado");
   const conteudo = document.getElementById("conteudo");
+  const resultado = document.getElementById("resultado");
 
   resultado.style.display = "flex";
-  conteudo.innerHTML = "⏳ Gerando plano...<br><br>";
+  conteudo.innerHTML = "Carregando...";
 
   const formData = new FormData(this);
-
-  const response = await fetch("/gerar", {
-    method: "POST",
-    body: formData
-  });
+  const response = await fetch("/gerar",{method:"POST",body:formData});
 
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
 
-  conteudo.innerHTML = "";
-
   let buffer = "";
 
-function formatarPlano(texto) {
-  return texto
-    .replace(/=== AULA (\d+) ===/g, `
-      </div>
-      <div class="aula">
-        <h2>📘 Aula $1</h2>
-    `)
+  while(true){
+    const {done,value} = await reader.read();
+    if(done) break;
 
-    .replace(/Conteúdo:/g, "<h4>📌 Conteúdo</h4>")
-    .replace(/Recursos didáticos:/g, "<h4>📚 Recursos didáticos</h4>")
-    .replace(/Livro:/g, "<h4>📖 Livro</h4>")
-    .replace(/Capítulo:/g, "<h4>📘 Capítulo</h4>")
-    .replace(/Metodologia:/g, "<h4>🧠 Metodologia</h4>")
-    .replace(/Atividade:/g, "<h4>🛠 Atividade</h4>")
-    .replace(/Avaliação:/g, "<h4>🧾 Avaliação</h4>")
-    .replace(/\n/g, "<br>");
-}
-
-while (true) {
-  const { done, value } = await reader.read();
-  if (done) break;
-
-  buffer += decoder.decode(value);
-
-  conteudo.innerHTML = formatarPlano(buffer);
-}
+    buffer += decoder.decode(value);
+    conteudo.innerHTML = formatarPlano(buffer);
+  }
 });
+function limparTexto(texto) {
+  return texto
+    .replace(/[^\x00-\x7FÀ-ÿ\n ]/g, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+function baixarPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
 
-async function salvar(){
+  const conteudo = document.getElementById("conteudo");
 
-  const nome = document.getElementById("nomeProfessor").value;
+  let y = 20;
 
-  const total = Number(av.fluidez)+Number(av.capacidade)+Number(av.diversidade)+Number(av.complexidade)+Number(av.relevancia);
-  const media = (total/5).toFixed(2);
+  const margemX = 15;
+  const largura = 180;
 
-  const dados = {
-    professor: nome,
-    questao: 1,
-    fluidez: av.fluidez,
-    capacidade: av.capacidade,
-    diversidade: av.diversidade,
-    complexidade: av.complexidade,
-    relevancia: av.relevancia,
-    media: media,
-    incompleta: av.incompleta ? "Sim":"Não",
-    observacoes: av.observacoes
-  };
+  doc.setFont("times", "bold");
+  doc.setFontSize(16);
+  doc.text("PLANO DE AULA", 105, y, { align: "center" });
 
-  // pega plano gerado da tela
- const plano = document.getElementById("conteudo").innerText;
+  y += 12;
 
-  const payload = {
-    plano: plano,
-    avaliacao: dados,
-    formulario: {
-      disciplina: document.querySelector("[name=disciplina]").value,
-      curso: document.querySelector("[name=curso]").value,
-      carga: document.querySelector("[name=carga]").value,
-      qtd_aulas: document.querySelector("[name=qtd_aulas]").value
+  const texto = conteudo.innerText
+    .replace(/[^\x20-\x7EÀ-ÿ\n\r]/g, "")
+    .replace(/\n{2,}/g, "\n");
+
+  const aulas = texto.split(/\n(?=Aula\s\d+)/g);
+
+  aulas.forEach((aula, index) => {
+
+    // 🔥 NOVA PÁGINA PARA CADA AULA
+    if (index > 0) {
+      doc.addPage();
+      y = 20;
     }
-  };
 
-  const res = await fetch("/download_plano", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(payload)
+    const linhas = aula.split("\n");
+
+    linhas.forEach(linha => {
+
+      if (y > 280) {
+        doc.addPage();
+        y = 20;
+      }
+
+      const textoLimpo = linha.trim();
+      if (!textoLimpo) return;
+
+      // 🔥 TÍTULO AULA EM NEGRITO
+      if (textoLimpo.startsWith("Aula")) {
+        doc.setFont("times", "bold");
+        doc.setFontSize(14);
+        y += 2;
+      }
+
+      // 🔥 SEÇÕES EM NEGRITO
+      else if (
+        textoLimpo === "CONTEÚDO" ||
+        textoLimpo === "RECURSOS" ||
+        textoLimpo === "METODOLOGIA" ||
+        textoLimpo === "ATIVIDADE" ||
+        textoLimpo === "AVALIAÇÃO"
+      ) {
+        doc.setFont("times", "bold");
+        doc.setFontSize(12);
+        y += 3;
+      }
+
+      // 🔥 TEXTO NORMAL
+      else {
+        doc.setFont("times", "normal");
+        doc.setFontSize(11);
+      }
+
+      const quebrado = doc.splitTextToSize(textoLimpo, largura);
+      doc.text(quebrado, margemX, y);
+      y += quebrado.length * 6 + 2;
+    });
   });
 
-  const blob = await res.blob();
-
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "plano_completo.zip";
-  link.click();
+  doc.save("plano_de_aula.pdf");
 }
 
 </script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>
