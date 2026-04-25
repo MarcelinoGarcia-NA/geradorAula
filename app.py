@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, Response, jsonify
 from Gerador import gerar_plano_stream
 import os, json, PyPDF2
-from pdf_generator import gerar_pdf
 
 app = Flask(__name__)
 os.makedirs("cache", exist_ok=True)
