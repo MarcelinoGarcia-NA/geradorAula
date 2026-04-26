@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -129,6 +128,100 @@ ul, li { page-break-inside: avoid; }
   pointer-events: none;
 }
 .toast.show { opacity: 1; }
+.avaliacao-card {
+  background: #ffffff;
+}
+
+.descricao {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.legenda {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 15px;
+}
+
+.metric-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.metric {
+  padding: 14px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fafafa;
+  transition: all 0.2s ease;
+}
+
+.metric:hover {
+  border-color: #6c5ce7;
+}
+
+.metric-question {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #2d3436;
+}
+/* container da escala */
+.scale {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+/* cada opção */
+.scale span {
+  flex: 1;
+}
+
+/* esconde radio padrão */
+.scale input[type="radio"] {
+  display: none;
+}
+
+/* botão visual */
+.scale label {
+  display: block;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* hover bonito */
+.scale label:hover {
+  border-color: #6c5ce7;
+  color: #6c5ce7;
+  transform: translateY(-2px);
+}
+
+/* selecionado (AGORA FUNCIONA) */
+.scale input[type="radio"]:checked + label {
+  background: #6c5ce7;
+  color: #fff;
+  border-color: #6c5ce7;
+  box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
+}
+textarea {
+  margin-top: 15px;
+  height: 80px;
+}
+
+.btn-avaliar {
+  margin-top: 10px;
+  background: #28a745;
+}
 </style>
 </head>
 <body>
@@ -215,104 +308,103 @@ ul, li { page-break-inside: avoid; }
     </div>
     <div id="conteudo" class="plano-box"></div>
   </div>
+  <div class="resultado-right card avaliacao-card">
+  <h3>Avaliação do Plano de Aula</h3>
+  <p class="descricao">
+    Avalie cada afirmação de acordo com sua concordância:
+  </p>
 
-<div class="resultado-right card">
-  <h3>Avaliação de Plano de Aula (Critérios PCK - Hu et al., 2024)</h3>
-  <p style="font-size: 0.85em; color: #666;">Avalie o plano de 1 (Discordo Totalmente) a 8 (Concordo Totalmente), conforme a escala original do estudo.</p>
-  
-  <input id="nomeProfessor" placeholder="Nome do professor avaliador">
-  
-  <div class="metric-grid" style="margin-top:12px; display: grid; grid-template-columns: 1fr; gap: 15px;">
-    
-    <!-- T1: Alinhamento de Objetivos Instrucionais -->
-    <div class="metric">
-      <div class="metric-title" title="Capacidade de desenhar objetivos instrucionais que se alinham ao conteúdo da aula e são formulados logicamente.">
-        <strong>T1:</strong> Alinhamento de Objetivos Instrucionais
-      </div>
-      <div class="scale">
-        <span><input type="radio" name="t1" id="t1_1" onchange="av.t1=1"><label for="t1_1">1</label></span>
-        <span><input type="radio" name="t1" id="t1_2" onchange="av.t1=2"><label for="t1_2">2</label></span>
-        <span><input type="radio" name="t1" id="t1_3" onchange="av.t1=3"><label for="t1_3">3</label></span>
-        <span><input type="radio" name="t1" id="t1_4" onchange="av.t1=4"><label for="t1_4">4</label></span>
-        <span><input type="radio" name="t1" id="t1_5" onchange="av.t1=5"><label for="t1_5">5</label></span>
-        <span><input type="radio" name="t1" id="t1_6" onchange="av.t1=6"><label for="t1_6">6</label></span>
-        <span><input type="radio" name="t1" id="t1_7" onchange="av.t1=7"><label for="t1_7">7</label></span>
-        <span><input type="radio" name="t1" id="t1_8" onchange="av.t1=8"><label for="t1_8">8</label></span>
-      </div>
-    </div>
-
-    <!-- S2: Identificação de Dificuldades de Aprendizagem -->
-    <div class="metric">
-      <div class="metric-title" title="Identificar mal-entendidos comuns e dificuldades de aprendizagem dos alunos.">
-        <strong>S2:</strong> Identificação de Dificuldades
-      </div>
-      <div class="scale">
-        <span><input type="radio" name="s2" id="s2_1" onchange="av.s2=1"><label for="s2_1">1</label></span>
-        <span><input type="radio" name="s2" id="s2_2" onchange="av.s2=2"><label for="s2_2">2</label></span>
-        <span><input type="radio" name="s2" id="s2_3" onchange="av.s2=3"><label for="s2_3">3</label></span>
-        <span><input type="radio" name="s2" id="s2_4" onchange="av.s2=4"><label for="s2_4">4</label></span>
-        <span><input type="radio" name="s2" id="s2_5" onchange="av.s2=5"><label for="s2_5">5</label></span>
-        <span><input type="radio" name="s2" id="s2_6" onchange="av.s2=6"><label for="s2_6">6</label></span>
-        <span><input type="radio" name="s2" id="s2_7" onchange="av.s2=7"><label for="s2_7">7</label></span>
-        <span><input type="radio" name="s2" id="s2_8" onchange="av.s2=8"><label for="s2_8">8</label></span>
-      </div>
-    </div>
-
-    <!-- Q2: Conectividade da Cadeia de Problemas -->
-    <div class="metric">
-      <div class="metric-title" title="Desenhar problemas e tarefas de aprendizagem desafiadores que se conectam e promovem o aprendizado passo a passo.">
-        <strong>Q2:</strong> Progressão da Cadeia de Problemas
-      </div>
-      <div class="scale">
-        <span><input type="radio" name="q2" id="q2_1" onchange="av.q2=1"><label for="q2_1">1</label></span>
-        <span><input type="radio" name="q2" id="q2_2" onchange="av.q2=2"><label for="q2_2">2</label></span>
-        <span><input type="radio" name="q2" id="q2_3" onchange="av.q2=3"><label for="q2_3">3</label></span>
-        <span><input type="radio" name="q2" id="q2_4" onchange="av.q2=4"><label for="q2_4">4</label></span>
-        <span><input type="radio" name="q2" id="q2_5" onchange="av.q2=5"><label for="q2_5">5</label></span>
-        <span><input type="radio" name="q2" id="q2_6" onchange="av.q2=6"><label for="q2_6">6</label></span>
-        <span><input type="radio" name="q2" id="q2_7" onchange="av.q2=7"><label for="q2_7">7</label></span>
-        <span><input type="radio" name="q2" id="q2_8" onchange="av.q2=8"><label for="q2_8">8</label></span>
-      </div>
-    </div>
-
-    <!-- A1: Interação Didática -->
-    <div class="metric">
-      <div class="metric-title" title="Desenhar conteúdo que promove discussões interativas entre professor-aluno e aluno-aluno.">
-        <strong>A1:</strong> Potencial de Interação
-      </div>
-      <div class="scale">
-        <span><input type="radio" name="a1" id="a1_1" onchange="av.a1=1"><label for="a1_1">1</label></span>
-        <span><input type="radio" name="a1" id="a1_2" onchange="av.a1=2"><label for="a1_2">2</label></span>
-        <span><input type="radio" name="a1" id="a1_3" onchange="av.a1=3"><label for="a1_3">3</label></span>
-        <span><input type="radio" name="a1" id="a1_4" onchange="av.a1=4"><label for="a1_4">4</label></span>
-        <span><input type="radio" name="a1" id="a1_5" onchange="av.a1=5"><label for="a1_5">5</label></span>
-        <span><input type="radio" name="a1" id="a1_6" onchange="av.a1=6"><label for="a1_6">6</label></span>
-        <span><input type="radio" name="a1" id="a1_7" onchange="av.a1=7"><label for="a1_7">7</label></span>
-        <span><input type="radio" name="a1" id="a1_8" onchange="av.a1=8"><label for="a1_8">8</label></span>
-      </div>
-    </div>
-
-    <!-- V1: Valor de Uso Prático -->
-    <div class="metric">
-      <div class="metric-title" title="Pode ser usado para modificação secundária e para fornecer valor de referência para planos de ensino.">
-        <strong>V1:</strong> Aplicabilidade e Valor de Referência
-      </div>
-      <div class="scale">
-        <span><input type="radio" name="v1" id="v1_1" onchange="av.v1=1"><label for="v1_1">1</label></span>
-        <span><input type="radio" name="v1" id="v1_2" onchange="av.v1=2"><label for="v1_2">2</label></span>
-        <span><input type="radio" name="v1" id="v1_3" onchange="av.v1=3"><label for="v1_3">3</label></span>
-        <span><input type="radio" name="v1" id="v1_4" onchange="av.v1=4"><label for="v1_4">4</label></span>
-        <span><input type="radio" name="v1" id="v1_5" onchange="av.v1=5"><label for="v1_5">5</label></span>
-        <span><input type="radio" name="v1" id="v1_6" onchange="av.v1=6"><label for="v1_6">6</label></span>
-        <span><input type="radio" name="v1" id="v1_7" onchange="av.v1=7"><label for="v1_7">7</label></span>
-        <span><input type="radio" name="v1" id="v1_8" onchange="av.v1=8"><label for="v1_8">8</label></span>
-      </div>
-    </div>
-
+  <div class="legenda">
+    <span>1 = Discordo totalmente</span>
+    <span>4 = Parcialmente adequado</span>
+    <span>8 = Concordo totalmente</span>
   </div>
 
-  <textarea placeholder="Comentários sobre a qualidade pedagógica e técnica..." style="margin-top:12px; height: 80px;" onchange="av.observacoes=this.value"></textarea>
-  <button type="button" onclick="salvarAvaliacao()" style="margin-top:10px; background-color: #28a745; color: white; border: none; padding: 10px; cursor: pointer; width: 100%;">✅ Salvar Avaliação Acadêmica</button>
+  <input id="nomeProfessor" placeholder="Nome do professor avaliador">
+    <div class="metric-grid" style="margin-top:12px; grid-template-columns: 1fr;">
+
+  <div class="metric">
+    <div class="metric-title">Os objetivos da aula estão claros e coerentes?</div>
+    <div class="scale">
+      <span><input type="radio" name="p1" id="p1_1"><label for="p1_1">1</label></span>
+      <span><input type="radio" name="p1" id="p1_2"><label for="p1_2">2</label></span>
+      <span><input type="radio" name="p1" id="p1_3"><label for="p1_3">3</label></span>
+      <span><input type="radio" name="p1" id="p1_4"><label for="p1_4">4</label></span>
+      <span><input type="radio" name="p1" id="p1_5"><label for="p1_5">5</label></span>
+      <span><input type="radio" name="p1" id="p1_6"><label for="p1_6">6</label></span>
+      <span><input type="radio" name="p1" id="p1_7"><label for="p1_7">7</label></span>
+      <span><input type="radio" name="p1" id="p1_8"><label for="p1_8">8</label></span>
+    </div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-title">O plano considera dificuldades dos alunos?</div>
+    <div class="scale">
+      <span><input type="radio" name="p2" id="p2_1"><label for="p2_1">1</label></span>
+      <span><input type="radio" name="p2" id="p2_2"><label for="p2_2">2</label></span>
+      <span><input type="radio" name="p2" id="p2_3"><label for="p2_3">3</label></span>
+      <span><input type="radio" name="p2" id="p2_4"><label for="p2_4">4</label></span>
+      <span><input type="radio" name="p2" id="p2_5"><label for="p2_5">5</label></span>
+      <span><input type="radio" name="p2" id="p2_6"><label for="p2_6">6</label></span>
+      <span><input type="radio" name="p2" id="p2_7"><label for="p2_7">7</label></span>
+      <span><input type="radio" name="p2" id="p2_8"><label for="p2_8">8</label></span>
+    </div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-title">As atividades evoluem progressivamente?</div>
+    <div class="scale">
+      <span><input type="radio" name="p3" id="p3_1"><label for="p3_1">1</label></span>
+      <span><input type="radio" name="p3" id="p3_2"><label for="p3_2">2</label></span>
+      <span><input type="radio" name="p3" id="p3_3"><label for="p3_3">3</label></span>
+      <span><input type="radio" name="p3" id="p3_4"><label for="p3_4">4</label></span>
+      <span><input type="radio" name="p3" id="p3_5"><label for="p3_5">5</label></span>
+      <span><input type="radio" name="p3" id="p3_6"><label for="p3_6">6</label></span>
+      <span><input type="radio" name="p3" id="p3_7"><label for="p3_7">7</label></span>
+      <span><input type="radio" name="p3" id="p3_8"><label for="p3_8">8</label></span>
+    </div>
+  </div>
+
+  <div class="metric">
+    <div class="metric-title">O plano promove interação dos alunos?</div>
+    <div class="scale">
+      <span><input type="radio" name="p4" id="p4_1"><label for="p4_1">1</label></span>
+      <span><input type="radio" name="p4" id="p4_2"><label for="p4_2">2</label></span>
+      <span><input type="radio" name="p4" id="p4_3"><label for="p4_3">3</label></span>
+      <span><input type="radio" name="p4" id="p4_4"><label for="p4_4">4</label></span>
+      <span><input type="radio" name="p4" id="p4_5"><label for="p4_5">5</label></span>
+      <span><input type="radio" name="p4" id="p4_6"><label for="p4_6">6</label></span>
+      <span><input type="radio" name="p4" id="p4_7"><label for="p4_7">7</label></span>
+      <span><input type="radio" name="p4" id="p4_8"><label for="p4_8">8</label></span>
+    </div>
+  </div>
+
+  <div class="metric">
+  <div class="metric-title">
+    O plano pode ser reutilizado, adaptado e serve como referência para outros professores?
+  </div>
+  <div class="scale">
+    <span><input type="radio" name="p5" id="p5_1"><label for="p5_1">1</label></span>
+    <span><input type="radio" name="p5" id="p5_2"><label for="p5_2">2</label></span>
+    <span><input type="radio" name="p5" id="p5_3"><label for="p5_3">3</label></span>
+    <span><input type="radio" name="p5" id="p5_4"><label for="p5_4">4</label></span>
+    <span><input type="radio" name="p5" id="p5_5"><label for="p5_5">5</label></span>
+    <span><input type="radio" name="p5" id="p5_6"><label for="p5_6">6</label></span>
+    <span><input type="radio" name="p5" id="p5_7"><label for="p5_7">7</label></span>
+    <span><input type="radio" name="p5" id="p5_8"><label for="p5_8">8</label></span>
+  </div>
+</div>
+
+  </div>
+  <h3>Comentários:</h3>
+  <textarea 
+    placeholder="Comentários (opcional): pontos fortes, melhorias, problemas..." 
+    onchange="av.observacoes=this.value">
+  </textarea>
+
+  <button onclick="salvarAvaliacao()" class="btn-avaliar">
+    ✅ Salvar Avaliação
+  </button>
 </div>
 </div>
 
