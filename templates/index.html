@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -209,6 +210,12 @@ ul, li { page-break-inside: avoid; }
 
     <h3>Comentários:</h3>
     <textarea id="comentarios" placeholder="Comentários (opcional): pontos fortes, melhorias, problemas..."></textarea>
+
+    <div style="margin-top:14px; padding:12px; background:#f0f7ff; border-radius:10px; border:1px solid #c8e0ff;">
+      <label style="font-weight:600; font-size:13px; color:#2d3436;">🔗 Google Sheets (opcional)</label>
+      <input id="sheetsUrl" placeholder="Cole a URL do Apps Script aqui..." style="margin-top:6px; font-size:12px;">
+    </div>
+
     <button onclick="salvarAvaliacao()" class="btn-avaliar">✅ Salvar Avaliação</button>
   </div>
 </div>
@@ -392,31 +399,53 @@ function salvarAvaliacao() {
   dispararDownload(new Blob([csv], { type: "text/csv;charset=utf-8;" }), "plano_" + topSlug + "_" + ts + ".csv");
 
   /* ── JSON (400ms delay) ── */
+  const registro = {
+    id: ts,
+    geradoEm: new Date().toISOString(),
+    inputs: {
+      disciplina:  inp.disciplina  || "",
+      curso:       inp.curso       || "",
+      carga:       inp.carga       || "",
+      qtd_aulas:   inp.qtd_aulas   || "",
+      duracao:     inp.duracao     || "",
+      ementa:      inp.ementa      || "",
+      objetivo:    inp.objetivo    || "",
+      nomeArquivo: inp.nomeArquivo || "",
+      modelo:      inp.ia          || "",
+      topico:      inp.topico      || ""
+    },
+    plano: { aulas, textoRaw: planoAtualTexto },
+    avaliacaoProfessor: { nome: professor, metricas, observacoes }
+  };
+
   setTimeout(() => {
-    const registro = {
-      id: ts,
-      geradoEm: new Date().toISOString(),
-      inputs: {
-        disciplina:  inp.disciplina  || "",
-        curso:       inp.curso       || "",
-        carga:       inp.carga       || "",
-        qtd_aulas:   inp.qtd_aulas   || "",
-        duracao:     inp.duracao     || "",
-        ementa:      inp.ementa      || "",
-        objetivo:    inp.objetivo    || "",
-        nomeArquivo: inp.nomeArquivo || "",
-        modelo:      inp.ia          || "",
-        topico:      inp.topico      || ""
-      },
-      plano: { aulas, textoRaw: planoAtualTexto },
-      avaliacaoProfessor: { nome: professor, metricas, observacoes }
-    };
     dispararDownload(
       new Blob([JSON.stringify(registro, null, 2)], { type: "application/json" }),
       "plano_" + topSlug + "_" + ts + ".json"
     );
     showToast("CSV e JSON salvos!");
   }, 400);
+
+  /* ── Google Sheets via Apps Script ── */
+  const sheetsUrl = document.getElementById("sheetsUrl").value.trim();
+  if (sheetsUrl) {
+    enviarParaSheets(sheetsUrl, registro);
+  }
+}
+
+async function enviarParaSheets(url, registro) {
+  showToast("Enviando para Google Sheets...");
+  try {
+    await fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(registro)
+    });
+    setTimeout(() => showToast("✅ Enviado para Google Sheets!"), 600);
+  } catch(e) {
+    showToast("❌ Erro ao enviar para Sheets: " + e.message);
+  }
 }
 
 function montarRegistro() {
