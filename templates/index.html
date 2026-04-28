@@ -1,15 +1,79 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <title>Gerador de Plano de Aula</title>
 <style>
-body { font-family: Arial, sans-serif; background: #f5f6fa; margin: 0; padding: 20px; }
-.container { max-width: 1200px; margin: auto; }
-.steps { display: flex; justify-content: space-between; margin-bottom: 20px; text-align: center; }
-.step { flex: 1; }
-.step-circle { width: 35px; height: 35px; background: #6c5ce7; color: white; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 5px; }
+body { font-family: Arial, sans-serif; background: #f5f6fa; margin: 0; padding: 0; }
+.container { max-width: 1200px; margin: auto; padding: 0 20px 20px; }
+
+/* ── HEADER ── */
+.site-header {
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 18px 28px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+/* ── HEADER ── */
+.site-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 22px 32px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid #6c5ce7;
+}
+.header-left h1 {
+  margin: 0 0 3px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.2px;
+}
+.header-left span {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ── STEPS ── */
+.steps {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  background: white;
+  border-radius: 10px;
+  padding: 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+.step {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-right: 1px solid #f0f0f0;
+  position: relative;
+}
+.step:last-child { border-right: none; }
+.step-circle {
+  width: 28px; height: 28px;
+  background: #ede9ff;
+  color: #6c5ce7;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.step-text { display: flex; flex-direction: column; gap: 1px; text-align: left; }
+.step-label { font-size: 11px; font-weight: 700; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.4px; }
+.step-desc { font-size: 11px; color: #999; }
 .card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 .row { display: flex; gap: 15px; margin-bottom: 15px; }
 .col { flex: 1; }
@@ -59,16 +123,52 @@ ul, li { page-break-inside: avoid; }
 .scale label:hover { border-color: #6c5ce7; color: #6c5ce7; transform: translateY(-2px); }
 .scale input[type="radio"]:checked + label { background: #6c5ce7; color: #fff; border-color: #6c5ce7; box-shadow: 0 4px 10px rgba(108,92,231,0.3); }
 .btn-avaliar { margin-top: 10px; background: #28a745; }
+
+/* Perfil do avaliador */
+.perfil-avaliador { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.perfil-avaliador .row-perfil { display: flex; gap: 10px; }
+.perfil-avaliador .row-perfil .col { flex: 1; }
 </style>
 </head>
 <body>
+<header class="site-header">
+  <div class="header-left">
+    <h1>Gerador de Plano de Aula</h1>
+    <span>Planejamento pedagógico com apoio de inteligência artificial</span>
+  </div>
+</header>
+
 <div class="container">
 
 <div class="steps">
-  <div class="step"><div class="step-circle">1</div>Dados</div>
-  <div class="step"><div class="step-circle">2</div>IA</div>
-  <div class="step"><div class="step-circle">3</div>Resultado</div>
-  <div class="step"><div class="step-circle">4</div>Avaliação</div>
+  <div class="step">
+    <div class="step-circle">1</div>
+    <div class="step-text">
+      <span class="step-label">Configuração</span>
+      <span class="step-desc">Disciplina, ementa e tópico</span>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-circle">2</div>
+    <div class="step-text">
+      <span class="step-label">Modelo de IA</span>
+      <span class="step-desc">GPT ou Claude para gerar</span>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-circle">3</div>
+    <div class="step-text">
+      <span class="step-label">Plano Gerado</span>
+      <span class="step-desc">Visualizar, exportar PDF/JSON</span>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-circle">4</div>
+    <div class="step-text">
+      <span class="step-label">Avaliação</span>
+      <span class="step-desc">Escala Likert 1–8 por avaliador</span>
+    </div>
+  </div>
 </div>
 
 <form id="form">
@@ -133,7 +233,30 @@ ul, li { page-break-inside: avoid; }
       <span>8 = Concordo totalmente</span>
     </div>
 
-    <input id="nomeProfessor" placeholder="Nome do professor avaliador">
+    <!-- Perfil do avaliador -->
+    <div class="perfil-avaliador">
+      <input id="avaliadorId" placeholder="Identificador do avaliador (ex: P1, P2)">
+      <input id="experiencia" placeholder="Tempo de experiência (anos)" type="number" min="0">
+      <div class="row-perfil">
+        <div class="col">
+          <select id="formacao">
+            <option value="">Formação acadêmica</option>
+            <option>Graduação</option>
+            <option>Especialização</option>
+            <option>Mestrado</option>
+            <option>Doutorado</option>
+          </select>
+        </div>
+        <div class="col">
+          <select id="area">
+            <option value="">Área de atuação</option>
+            <option>Computação</option>
+            <option>Educação</option>
+            <option>Outra</option>
+          </select>
+        </div>
+      </div>
+    </div>
 
     <div style="margin-top:12px;">
 
@@ -327,7 +450,11 @@ function getVal(name) {
 function salvarAvaliacao() {
   if (!planoAtualTexto) { showToast("Gere um plano primeiro."); return; }
 
-  const professor   = document.getElementById("nomeProfessor").value;
+  // Novos campos de perfil do avaliador
+  const avaliadorId = document.getElementById("avaliadorId").value;
+  const experiencia = document.getElementById("experiencia").value;
+  const formacao    = document.getElementById("formacao").value;
+  const area        = document.getElementById("area").value;
   const observacoes = document.getElementById("comentarios").value;
 
   const metricas = [
@@ -386,7 +513,11 @@ function salvarAvaliacao() {
     linhas.push([]);
   });
   linhas.push(["Avaliação do Professor", ""]);
-  linhas.push(["Nome do Professor", professor]);
+  // Novos campos no CSV
+  linhas.push(["Avaliador ID",       avaliadorId]);
+  linhas.push(["Experiência (anos)", experiencia]);
+  linhas.push(["Formação",           formacao]);
+  linhas.push(["Área de atuação",    area]);
   metricas.forEach(m => linhas.push([m.pergunta, m.valor]));
   linhas.push(["Observações", observacoes]);
 
@@ -410,7 +541,15 @@ function salvarAvaliacao() {
       topico:      inp.topico      || ""
     },
     plano: { aulas, textoRaw: planoAtualTexto },
-    avaliacaoProfessor: { nome: professor, metricas, observacoes }
+    // Novos campos no JSON
+    avaliacaoProfessor: {
+      id: avaliadorId,
+      experiencia,
+      formacao,
+      area,
+      metricas,
+      observacoes
+    }
   };
 
   setTimeout(() => {
@@ -445,7 +584,13 @@ function montarRegistro() {
     geradoEm: new Date().toISOString(),
     inputs: dadosAtualForm,
     plano: { textoRaw: planoAtualTexto, html: planoAtualHTML },
-    avaliacao: { professor: document.getElementById("nomeProfessor").value, observacoes: document.getElementById("comentarios").value }
+    avaliacao: {
+      avaliadorId:  document.getElementById("avaliadorId").value,
+      experiencia:  document.getElementById("experiencia").value,
+      formacao:     document.getElementById("formacao").value,
+      area:         document.getElementById("area").value,
+      observacoes:  document.getElementById("comentarios").value
+    }
   };
 }
 
@@ -470,14 +615,16 @@ function renderHistorico() {
   const el = document.getElementById("listaHistorico");
   if (h.length === 0) { el.innerHTML = '<div class="empty-state">Nenhum plano salvo ainda.</div>'; return; }
   el.innerHTML = h.map(r => {
-    const data   = new Date(r.geradoEm).toLocaleString("pt-BR");
-    const topico = r.inputs?.topico || "—";
-    const ia     = r.inputs?.ia?.toUpperCase() || "—";
-    const prof   = r.avaliacao?.professor ? ` · Prof. ${r.avaliacao.professor}` : "";
+    const data        = new Date(r.geradoEm).toLocaleString("pt-BR");
+    const topico      = r.inputs?.topico || "—";
+    const ia          = r.inputs?.ia?.toUpperCase() || "—";
+    // Suporte a registros antigos (campo professor) e novos (campo avaliadorId)
+    const avaliador   = r.avaliacao?.avaliadorId || r.avaliacao?.professor || "";
+    const sufixo      = avaliador ? ` · Avaliador: ${avaliador}` : "";
     return `<div class="historico-card">
       <div class="historico-info">
         <div class="historico-titulo">${topico} <span class="badge-ia">${ia}</span></div>
-        <div class="historico-meta">${data}${prof}</div>
+        <div class="historico-meta">${data}${sufixo}</div>
       </div>
       <div class="historico-acoes">
         <button class="secondary" onclick="verPlano(${r.id})">👁 Ver</button>
@@ -495,7 +642,12 @@ function verPlano(id) {
   dadosAtualForm = r.inputs; planoAtualTexto = r.plano.textoRaw; planoAtualHTML = r.plano.html;
   document.getElementById("conteudo").innerHTML = planoAtualHTML;
   document.getElementById("resultado").style.display = "flex";
-  document.getElementById("nomeProfessor").value = r.avaliacao?.professor || "";
+  // Restaura campos do perfil do avaliador (com fallback para registros antigos)
+  document.getElementById("avaliadorId").value = r.avaliacao?.avaliadorId || r.avaliacao?.professor || "";
+  document.getElementById("experiencia").value = r.avaliacao?.experiencia || "";
+  document.getElementById("formacao").value    = r.avaliacao?.formacao    || "";
+  document.getElementById("area").value        = r.avaliacao?.area        || "";
+  document.getElementById("comentarios").value = r.avaliacao?.observacoes || "";
   window.scrollTo({ top: 0, behavior: "smooth" });
   showToast("Plano carregado do histórico.");
 }
