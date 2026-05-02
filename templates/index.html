@@ -2,709 +2,990 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Gerador de Plano de Aula</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experimento — Gerador de Plano de Aula</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
-body { font-family: Arial, sans-serif; background: #f5f6fa; margin: 0; padding: 0; }
-.container { max-width: 1200px; margin: auto; padding: 0 20px 20px; }
-
-/* ── HEADER ── */
-.site-header {
-  background: #fff;
-  border-bottom: 1px solid #e8e8e8;
-  padding: 18px 28px;
-  margin-bottom: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-/* ── HEADER ── */
-.site-header {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  padding: 22px 32px;
-  margin-bottom: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 3px solid #6c5ce7;
-}
-.header-left h1 {
-  margin: 0 0 3px;
-  font-size: 20px;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: -0.2px;
-}
-.header-left span {
-  font-size: 13px;
-  color: rgba(255,255,255,0.5);
+/* =============================================
+   TEMA CLARO — variáveis globais
+============================================= */
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface2: #f0f3fa;
+  --border: #dde2ef;
+  --border2: #c8cfdf;
+  --accent: #3a6bd6;
+  --accent2: #2554b8;
+  --accent-glow: rgba(58, 107, 214, 0.10);
+  --green: #2a9d6e;
+  --green-light: #e8f7f1;
+  --green-glow: rgba(42, 157, 110, 0.12);
+  --red: #d94040;
+  --red-light: #fdeaea;
+  --text: #1e2540;
+  --text2: #4b5577;
+  --text3: #8b94b0;
+  --gpt: #1a9e6a;
+  --claude: #b05c3a;
+  --r: 10px;
+  --rl: 16px;
 }
 
-/* ── STEPS ── */
-.steps {
-  display: flex;
-  align-items: center;
-  margin-bottom: 24px;
-  background: white;
-  border-radius: 10px;
-  padding: 0;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  overflow: hidden;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
 }
-.step {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 18px;
-  border-right: 1px solid #f0f0f0;
-  position: relative;
+
+/* HEADER */
+.hdr {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px; height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 1px 6px rgba(58,107,214,0.07);
 }
-.step:last-child { border-right: none; }
-.step-circle {
-  width: 28px; height: 28px;
-  background: #ede9ff;
-  color: #6c5ce7;
-  border-radius: 50%;
+.hdr-brand { display: flex; align-items: center; gap: 10px; }
+.hdr-logo {
+  width: 30px; height: 30px;
+  background: linear-gradient(135deg, var(--accent), var(--green));
+  border-radius: 8px; display: flex; align-items: center;
+  justify-content: center; font-size: 15px;
+}
+.hdr-title { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--text); }
+.hdr-badge {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  background: var(--accent-glow);
+  border: 1px solid rgba(58,107,214,.25);
+  color: var(--accent2); padding: 3px 11px; border-radius: 20px;
+}
+
+/* LAYOUT */
+.page { max-width: 1020px; margin: 0 auto; padding: 28px 20px 80px; }
+.screen { display: none; animation: fi .3s ease; }
+.screen.active { display: block; }
+@keyframes fi { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* SETUP HERO */
+.setup-hero { text-align: center; padding: 48px 0 32px; }
+.eyebrow {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--accent); margin-bottom: 14px;
+}
+.big-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(26px, 5vw, 44px); line-height: 1.15; margin-bottom: 12px; color: var(--text);
+}
+.big-title em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--accent), var(--green));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.sub { font-size: 15px; color: var(--text2); max-width: 460px; margin: 0 auto 32px; line-height: 1.6; }
+
+/* SEQUÊNCIA PREVIEW */
+.seq-preview { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+.spill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: 12px; color: var(--text2);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.spill .sn {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  width: 18px; height: 18px; background: var(--surface2);
+  border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; color: var(--text3); border: 1px solid var(--border);
+}
+.pia { font-weight: 600; font-size: 11px; }
+.pia.gpt { color: var(--gpt); }
+.pia.claude { color: var(--claude); }
+
+/* TERMO DE CONSENTIMENTO */
+.consent-box {
+  background: #eef4ff;
+  border: 1px solid rgba(58,107,214,.25);
+  border-radius: var(--rl);
+  padding: 20px 22px;
+  margin-bottom: 20px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.consent-box h4 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 16px; color: var(--text); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.consent-box p {
+  font-size: 13px; color: var(--text2); line-height: 1.65; margin-bottom: 14px;
+}
+.consent-check {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13px; color: var(--text); cursor: pointer;
+}
+.consent-check input[type="checkbox"] {
+  width: 17px; height: 17px; margin-top: 2px;
+  accent-color: var(--accent); cursor: pointer; flex-shrink: 0;
+}
+
+/* CARD */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--rl); padding: 26px 30px;
+  max-width: 500px; margin: 0 auto;
+  box-shadow: 0 2px 16px rgba(58,107,214,0.07);
+}
+.card h3 { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 18px; color: var(--text); }
+.field { margin-bottom: 14px; }
+.field label {
+  display: block; font-size: 11px; font-weight: 600; color: var(--text3);
+  text-transform: uppercase; letter-spacing: .6px; margin-bottom: 5px;
+}
+.field input, .field select {
+  width: 100%; padding: 10px 13px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 14px;
+  outline: none; transition: border-color .2s;
+}
+.field input:focus, .field select:focus { border-color: var(--accent); }
+.field input::placeholder { color: var(--text3); }
+.field select option { background: #fff; }
+.info-box {
+  background: #eef4ff; border: 1px solid rgba(58,107,214,.2);
+  border-radius: var(--r); padding: 11px 14px; margin-bottom: 18px;
+  font-size: 13px; color: var(--accent2);
+  display: flex; gap: 9px; line-height: 1.5;
+}
+
+/* BUTTONS */
+.btn {
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 12px;
-  font-weight: 700;
-  flex-shrink: 0;
+  gap: 7px; padding: 11px 22px; border-radius: var(--r);
+  border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+  transition: all .2s;
 }
-.step-text { display: flex; flex-direction: column; gap: 1px; text-align: left; }
-.step-label { font-size: 11px; font-weight: 700; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.4px; }
-.step-desc { font-size: 11px; color: #999; }
-.card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-.row { display: flex; gap: 15px; margin-bottom: 15px; }
-.col { flex: 1; }
-input, textarea, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px; box-sizing: border-box; }
-textarea { resize: vertical; }
-button { width: 100%; padding: 15px; background: linear-gradient(90deg, #6c5ce7, #a29bfe); border: none; border-radius: 10px; color: white; font-size: 16px; cursor: pointer; }
-button:hover { opacity: 0.9; }
-button.secondary { background: white; color: #6c5ce7; border: 2px solid #6c5ce7; padding: 10px; font-size: 14px; }
-button.danger { background: white; color: #e74c3c; border: 2px solid #e74c3c; padding: 10px; font-size: 14px; }
-.resultado-container { display: none; gap: 20px; }
-.resultado-left { flex: 1.2; }
-.resultado-right { flex: 1; }
-.plano-box { background: #fafafa; padding: 15px; border-radius: 8px; max-height: 600px; overflow-y: auto; border: 1px solid #eee; }
-.aula-card { background: white; border-radius: 14px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-left: 6px solid #6c5ce7; page-break-inside: avoid; break-inside: avoid; }
-.aula-header { font-size: 20px; font-weight: bold; color: #6c5ce7; margin-bottom: 15px; }
-.aula-section { margin-bottom: 14px; }
-.aula-section h4 { margin: 0 0 6px 0; font-size: 13px; color: #777; text-transform: uppercase; letter-spacing: 0.5px; }
-.aula-section p { margin: 0; line-height: 1.6; color: #333; white-space: pre-line; }
-ul, li { page-break-inside: avoid; }
-#conteudo { display: block; }
+.btn-p {
+  background: linear-gradient(135deg, var(--accent), #5b8aee);
+  color: #fff; width: 100%; padding: 13px; font-size: 16px;
+  box-shadow: 0 3px 16px rgba(58,107,214,.22);
+}
+.btn-p:hover { transform: translateY(-1px); box-shadow: 0 5px 22px rgba(58,107,214,.30); }
+.btn-p:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.btn-g {
+  background: linear-gradient(135deg, var(--green), #3cbf89);
+  color: #fff; font-weight: 600;
+  box-shadow: 0 3px 14px var(--green-glow);
+}
+.btn-g:hover { transform: translateY(-1px); }
+.btn-g:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.btn-o {
+  background: #fff; border: 1px solid var(--border2);
+  color: var(--text2);
+}
+.btn-o:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger {
+  background: var(--red-light); border: 1px solid rgba(217,64,64,.25);
+  color: var(--red); font-size: 13px; padding: 8px 16px;
+}
+.btn-danger:hover { background: #fbd9d9; }
 
-/* Histórico */
-.historico-card { background: white; border-radius: 12px; padding: 16px 20px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid #a29bfe; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.historico-info { flex: 1; }
-.historico-titulo { font-weight: 600; color: #2d3436; margin-bottom: 4px; }
-.historico-meta { font-size: 12px; color: #888; }
-.historico-acoes { display: flex; gap: 8px; flex-shrink: 0; }
-.historico-acoes button { width: auto; padding: 8px 14px; font-size: 13px; }
-.badge-ia { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; background: #e0dbff; color: #6c5ce7; margin-left: 8px; }
-.empty-state { text-align: center; padding: 40px 20px; color: #aaa; font-size: 14px; }
+/* PROGRESS */
+.prog-track {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--rl); padding: 18px 22px; margin-bottom: 22px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+.prog-hdr { display: flex; justify-content: space-between; margin-bottom: 13px; }
+.prog-lbl { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--text3); }
+.prog-frac { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--accent); }
+.prog-bar { height: 5px; background: var(--surface2); border-radius: 4px; overflow: hidden; margin-bottom: 14px; border: 1px solid var(--border); }
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--green));
+  border-radius: 4px; transition: width .5s cubic-bezier(.4,0,.2,1);
+}
+.dots { display: flex; gap: 6px; }
+.dot { flex: 1; height: 6px; border-radius: 3px; background: var(--border2); transition: all .3s; }
+.dot.done { background: var(--green); }
+.dot.active { background: var(--accent); box-shadow: 0 0 8px rgba(58,107,214,.35); }
 
-/* Toast */
-.toast { position: fixed; bottom: 24px; right: 24px; background: #2d3436; color: white; padding: 12px 20px; border-radius: 10px; font-size: 14px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-.toast.show { opacity: 1; }
+/* STEP CARD */
+.step-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--rl); padding: 22px 26px; margin-bottom: 18px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+.step-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(180deg, var(--accent), var(--green));
+  border-radius: 4px 0 0 4px;
+}
+.sc-hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 11px; }
+.sc-num { font-family: 'DM Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text3); }
+.badges { display: flex; gap: 7px; flex-wrap: wrap; }
+.badge { display: inline-flex; align-items: center; padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.badge-gpt { background: rgba(26,158,106,.10); border: 1px solid rgba(26,158,106,.25); color: var(--gpt); }
+.badge-claude { background: rgba(176,92,58,.10); border: 1px solid rgba(176,92,58,.25); color: var(--claude); }
+.badge-topic { background: var(--accent-glow); border: 1px solid rgba(58,107,214,.22); color: var(--accent2); }
+.sc-title { font-family: 'DM Serif Display', serif; font-size: 21px; margin-bottom: 3px; color: var(--text); }
+.sc-sub { font-size: 13px; color: var(--text2); }
 
-/* Avaliação */
-.avaliacao-card { background: #ffffff; }
-.descricao { font-size: 14px; color: #555; margin-bottom: 10px; }
-.legenda { display: flex; justify-content: space-between; font-size: 12px; color: #777; margin-bottom: 15px; }
-.metric { padding: 14px; border: 1px solid #eee; border-radius: 10px; background: #fafafa; transition: all 0.2s ease; margin-bottom: 12px; }
-.metric:hover { border-color: #6c5ce7; }
-.metric-title { font-weight: 600; margin-bottom: 10px; color: #2d3436; }
-.scale { display: flex; justify-content: space-between; gap: 6px; }
+/* NEXT PREVIEW */
+.nxt {
+  background: #f6f8ff; border: 1px solid var(--border);
+  border-radius: var(--r); padding: 11px 15px;
+  display: flex; align-items: center; gap: 9px;
+  margin-bottom: 18px; font-size: 13px; color: var(--text2);
+}
+.nxt .lbl { color: var(--text3); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; margin-right: 3px; }
+
+/* GENERATE */
+.gen-area {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--rl); padding: 22px; margin-bottom: 18px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+.gen-area h3 { font-family: 'DM Serif Display', serif; font-size: 18px; margin-bottom: 4px; color: var(--text); }
+.gen-area p { font-size: 13px; color: var(--text2); margin-bottom: 14px; }
+.plano-box {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 18px;
+  max-height: 500px; overflow-y: auto;
+  font-size: 14px; line-height: 1.65; display: none;
+}
+.plano-box::-webkit-scrollbar { width: 5px; }
+.plano-box::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+.loading-bar { height: 4px; background: var(--border); border-radius: 3px; overflow: hidden; margin: 10px 0; display: none; }
+.loading-bar .fill {
+  height: 100%; width: 30%;
+  background: linear-gradient(90deg, var(--accent), var(--green));
+  border-radius: 3px; animation: sl 1.4s ease-in-out infinite;
+}
+@keyframes sl { 0% { transform: translateX(-100%); } 100% { transform: translateX(430%); } }
+
+.aula-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 18px; margin-bottom: 14px;
+  border-left: 4px solid var(--accent);
+}
+.aula-hdr { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--accent); margin-bottom: 12px; }
+.aula-sec { margin-bottom: 10px; }
+.aula-sec h4 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .7px; color: var(--text3); margin-bottom: 4px; }
+.aula-sec ul { padding-left: 15px; }
+.aula-sec li { font-size: 13px; color: var(--text2); margin-bottom: 2px; line-height: 1.5; }
+.exp-row { display: flex; gap: 9px; margin-top: 10px; flex-wrap: wrap; }
+
+/* EVAL */
+.eval-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--rl); padding: 22px 26px; margin-bottom: 18px;
+  display: none; box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+.eval-card.on { display: block; animation: fi .3s ease; }
+.eval-card h3 { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 5px; color: var(--text); }
+.eval-card .desc { font-size: 13px; color: var(--text2); margin-bottom: 18px; }
+.scale-leg {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--text3); margin-bottom: 14px;
+  font-family: 'DM Mono', monospace;
+}
+.metric {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 14px; margin-bottom: 10px;
+  transition: border-color .2s;
+}
+.metric.answered { border-color: rgba(58,107,214,.4); background: #f5f8ff; }
+.metric-title { font-size: 13px; font-weight: 500; margin-bottom: 10px; color: var(--text); }
+.scale { display: flex; gap: 4px; }
 .scale span { flex: 1; }
-.scale input[type="radio"] { display: none; }
-.scale label { display: block; text-align: center; padding: 10px 0; border-radius: 10px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-weight: 500; transition: all 0.2s ease; }
-.scale label:hover { border-color: #6c5ce7; color: #6c5ce7; transform: translateY(-2px); }
-.scale input[type="radio"]:checked + label { background: #6c5ce7; color: #fff; border-color: #6c5ce7; box-shadow: 0 4px 10px rgba(108,92,231,0.3); }
-.btn-avaliar { margin-top: 10px; background: #28a745; }
+.scale input[type=radio] { display: none; }
+.scale label {
+  display: block; text-align: center; padding: 7px 0;
+  border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface); cursor: pointer;
+  font-size: 13px; font-family: 'DM Mono', monospace;
+  font-weight: 500; color: var(--text3); transition: all .15s;
+}
+.scale label:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+.scale input[type=radio]:checked + label {
+  background: var(--accent); color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 2px 10px rgba(58,107,214,.30);
+}
 
-/* Perfil do avaliador */
-.perfil-avaliador { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-.perfil-avaliador .row-perfil { display: flex; gap: 10px; }
-.perfil-avaliador .row-perfil .col { flex: 1; }
+.eval-ta {
+  width: 100%; padding: 11px 13px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 14px;
+  resize: vertical; min-height: 75px; outline: none;
+  transition: border-color .2s;
+}
+.eval-ta:focus { border-color: var(--accent); }
+.eval-ta::placeholder { color: var(--text3); }
+
+/* COMPLETE */
+.done-hero { text-align: center; padding: 72px 20px; }
+.done-icon { font-size: 68px; margin-bottom: 20px; display: block; animation: bounce .6s ease; }
+@keyframes bounce { 0% { transform:scale(.5);opacity:0; } 70% { transform:scale(1.1); } 100% { transform:scale(1);opacity:1; } }
+.done-title {
+  font-family: 'DM Serif Display', serif; font-size: 38px;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, var(--accent), var(--green));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.done-sub { font-size: 15px; color: var(--text2); max-width: 400px; margin: 0 auto 32px; line-height: 1.6; }
+.done-sum {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--rl); padding: 22px;
+  max-width: 520px; margin: 0 auto 28px; text-align: left;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+.sum-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.sum-row:last-child { border-bottom: none; }
+.sum-row .lbl { color: var(--text2); }
+.sum-row .val { font-weight: 500; font-family: 'DM Mono', monospace; color: var(--text); }
+.sum-row .val.g { color: var(--green); }
+.done-acts { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--surface); border: 1px solid var(--border2);
+  color: var(--text); padding: 11px 18px; border-radius: var(--r);
+  font-size: 14px; z-index: 9999; opacity: 0;
+  transform: translateY(8px); transition: all .25s;
+  pointer-events: none; max-width: 300px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.13);
+}
+.toast.on { opacity: 1; transform: translateY(0); }
+.toast.ok { border-left: 3px solid var(--green); }
+.toast.er { border-left: 3px solid var(--red); }
 </style>
 </head>
 <body>
-<header class="site-header">
-  <div class="header-left">
-    <h1>Gerador de Plano de Aula</h1>
-    <span>Planejamento pedagógico com apoio de inteligência artificial</span>
+
+<header class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-logo">🔬</div>
+    <span class="hdr-title">PlanoIA Experiment</span>
   </div>
+  <span class="hdr-badge">EXPERIMENTO CONTROLADO</span>
 </header>
 
-<div class="container">
+<div class="page">
 
-<div class="steps">
-  <div class="step">
-    <div class="step-circle">1</div>
-    <div class="step-text">
-      <span class="step-label">Configuração</span>
-      <span class="step-desc">Disciplina, ementa e tópico</span>
-    </div>
-  </div>
-  <div class="step">
-    <div class="step-circle">2</div>
-    <div class="step-text">
-      <span class="step-label">Modelo de IA</span>
-      <span class="step-desc">GPT ou Claude para gerar</span>
-    </div>
-  </div>
-  <div class="step">
-    <div class="step-circle">3</div>
-    <div class="step-text">
-      <span class="step-label">Plano Gerado</span>
-      <span class="step-desc">Visualizar, exportar PDF/JSON</span>
-    </div>
-  </div>
-  <div class="step">
-    <div class="step-circle">4</div>
-    <div class="step-text">
-      <span class="step-label">Avaliação</span>
-      <span class="step-desc">Escala Likert 1–8 por avaliador</span>
-    </div>
-  </div>
-</div>
-
-<form id="form">
-<div class="card">
-  <h3>Configuração</h3>
-  <div class="row">
-    <div class="col"><label>Disciplina</label><input value="Algoritmos e Lógica de Programação" readonly><input type="hidden" name="disciplina" value="Algoritmos e Lógica de Programação"></div>
-    <div class="col"><label>Curso</label><input value="Ciência da Computação" readonly><input type="hidden" name="curso" value="Ciência da Computação"></div>
-  </div>
-  <div class="row">
-    <div class="col"><label>Carga Horária</label><input value="60h" readonly><input type="hidden" name="carga" value="60h"></div>
-    <div class="col"><label>Número de Aulas</label><input value="3" readonly><input type="hidden" name="qtd_aulas" value="3"></div>
-    <div class="col"><label>Duração</label><input value="1h30" readonly><input type="hidden" name="duracao" value="1h30"></div>
-  </div>
-  <label>Ementa</label>
-  <textarea readonly>Variáveis, tipos de dados, estruturas condicionais e repetição.</textarea>
-  <input type="hidden" name="ementa" value="Variáveis, tipos de dados, estruturas condicionais e repetição.">
-  <label>Objetivo</label>
-  <textarea readonly>Introduzir conceitos básicos de programação para iniciantes.</textarea>
-  <input type="hidden" name="objetivo" value="Introduzir conceitos básicos de programação para iniciantes.">
-  <label>Arquivo PDF</label>
-  <input type="file" name="arquivo">
-  <div class="row">
-    <div class="col">
-      <label>Modelo</label>
-      <select name="ia" id="ia" onchange="verificarCache()">
-        <option value="gpt">GPT</option>
-        <option value="claude">Claude</option>
-      </select>
-    </div>
-    <div class="col">
-      <label>Tópico</label>
-      <select name="topico" id="topico" onchange="verificarCache()">
-        <option>Variáveis e tipos de dados</option>
-        <option>Estruturas condicionais</option>
-        <option>Estruturas de repetição</option>
-      </select>
-    </div>
-  </div>
-  <button type="submit">🚀 Gerar Plano</button>
-</div>
-</form>
-
-<!-- RESULTADO -->
-<div id="resultado" class="resultado-container">
-  <div class="resultado-left card">
-    <h3>Plano Gerado</h3>
-    <div class="row" style="margin-bottom:10px;">
-      <div class="col"><button type="button" onclick="baixarPDF()">📄 Baixar PDF</button></div>
-      <div class="col"><button type="button" class="secondary" onclick="baixarJSON()">💾 Baixar JSON</button></div>
-      <div class="col"><button type="button" class="secondary" onclick="salvarNoHistorico()">📌 Salvar no Histórico</button></div>
-    </div>
-    <div id="conteudo" class="plano-box"></div>
-  </div>
-
-  <div class="resultado-right card avaliacao-card">
-    <h3>Avaliação do Plano de Aula</h3>
-    <p class="descricao">Avalie cada afirmação de acordo com sua concordância:</p>
-    <div class="legenda">
-      <span>1 = Discordo totalmente</span>
-      <span>4 = Parcialmente adequado</span>
-      <span>8 = Concordo totalmente</span>
+  <!-- ===================== SETUP ===================== -->
+  <div class="screen active" id="s-setup">
+    <div class="setup-hero">
+      <div class="eyebrow">Pesquisa Pedagógica · 6 Avaliações Controladas</div>
+      <h1 class="big-title">Experimento de<br><em>Geração de Planos</em></h1>
+      <p class="sub">O sistema guiará você pelas 6 avaliações em sequência fixa. Nenhuma etapa pode ser pulada.</p>
     </div>
 
-    <!-- Perfil do avaliador -->
-    <div class="perfil-avaliador">
-      <input id="avaliadorId" placeholder="Identificador do avaliador (ex: P1, P2)">
-      <input id="experiencia" placeholder="Tempo de experiência (anos)" type="number" min="0">
-      <div class="row-perfil">
-        <div class="col">
-          <select id="formacao">
-            <option value="">Formação acadêmica</option>
-            <option>Graduação</option>
-            <option>Especialização</option>
-            <option>Mestrado</option>
-            <option>Doutorado</option>
-          </select>
-        </div>
-        <div class="col">
-          <select id="area">
-            <option value="">Área de atuação</option>
-            <option>Computação</option>
-            <option>Educação</option>
-            <option>Outra</option>
-          </select>
-        </div>
+    <div class="seq-preview">
+      <div class="spill"><div class="sn">1</div><span class="pia gpt">GPT</span><span>Variáveis</span></div>
+      <div class="spill"><div class="sn">2</div><span class="pia gpt">GPT</span><span>Condicionais</span></div>
+      <div class="spill"><div class="sn">3</div><span class="pia gpt">GPT</span><span>Repetição</span></div>
+      <div class="spill"><div class="sn">4</div><span class="pia claude">Claude</span><span>Variáveis</span></div>
+      <div class="spill"><div class="sn">5</div><span class="pia claude">Claude</span><span>Condicionais</span></div>
+      <div class="spill"><div class="sn">6</div><span class="pia claude">Claude</span><span>Repetição</span></div>
+    </div>
+
+    <!-- TERMO DE CONSENTIMENTO -->
+    <div class="consent-box">
+      <h4>📋 Termo de Consentimento</h4>
+      <p>
+        Este experimento é parte de uma pesquisa acadêmica sobre geração automática de planos de aula por modelos de inteligência artificial.
+        Sua participação é voluntária e anônima. Os dados coletados (avaliações dos planos de aula) serão utilizados exclusivamente para fins de pesquisa científica,
+        armazenados de forma segura e nunca divulgados de forma identificável.
+      </p>
+      <p>
+        Ao participar, você concorda com a coleta e o uso das suas avaliações conforme descrito acima.
+        Você pode interromper a participação a qualquer momento.
+      </p>
+      <label class="consent-check">
+        <input type="checkbox" id="consent-cb" onchange="toggleIniciar()">
+        <span>Li e concordo em participar do experimento.</span>
+      </label>
+    </div>
+
+    <!-- FORMULÁRIO DE IDENTIFICAÇÃO (sem campo Área) -->
+    <div class="card">
+      <h3>Identificação do Avaliador</h3>
+      <div class="info-box">
+        <span>📄</span>
+        <span>O material de referência (PDF) está no servidor e será usado automaticamente em cada etapa.</span>
+      </div>
+
+      <div class="field">
+        <label>Identificador *</label>
+        <input id="f-id" placeholder="Ex: P1, Professor_João">
+      </div>
+
+      <div class="field">
+        <label>Formação</label>
+        <select id="f-form">
+          <option value="">Selecione</option>
+          <option>Graduação</option>
+          <option>Especialização</option>
+          <option>Mestrado</option>
+          <option>Doutorado</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Experiência docente (anos)</label>
+        <input id="f-exp" type="number" min="0" placeholder="Ex: 5">
+      </div>
+
+      <button class="btn btn-p" id="btn-iniciar" onclick="iniciar()" disabled>🚀 Iniciar Experimento</button>
+    </div>
+  </div>
+
+  <!-- ===================== EXPERIMENT ===================== -->
+  <div class="screen" id="s-exp">
+    <div class="prog-track">
+      <div class="prog-hdr">
+        <span class="prog-lbl">Progresso</span>
+        <span class="prog-frac" id="frac">1 / 6</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+      <div class="dots" id="dots">
+        <div class="dot active" data-s="1"></div><div class="dot" data-s="2"></div>
+        <div class="dot" data-s="3"></div><div class="dot" data-s="4"></div>
+        <div class="dot" data-s="5"></div><div class="dot" data-s="6"></div>
       </div>
     </div>
 
-    <div style="margin-top:12px;">
+    <div class="step-card">
+      <div class="sc-hdr">
+        <span class="sc-num" id="sc-num">Avaliação 1 de 6</span>
+        <div class="badges">
+          <span class="badge" id="b-ia">GPT-4o</span>
+          <span class="badge badge-topic" id="b-topic">Variáveis e tipos de dados</span>
+        </div>
+      </div>
+      <div class="sc-title" id="sc-title">Tópico: Variáveis e tipos de dados</div>
+      <div class="sc-sub" id="sc-sub">O sistema usará GPT-4o com o material do servidor.</div>
+    </div>
 
-      <div class="metric">
+    <div class="nxt" id="nxt">
+      <span>👁</span>
+      <span><span class="lbl">Próxima etapa:</span><span id="nxt-lbl">—</span></span>
+    </div>
+
+    <div class="gen-area">
+      <h3>Plano de Aula Gerado</h3>
+      <p id="gen-status">Clique em gerar para iniciar esta etapa.</p>
+      <button class="btn btn-p" id="btn-gerar" onclick="gerarPlano()" style="margin-bottom:12px">⚡ Gerar Plano de Aula</button>
+      <div class="loading-bar" id="lbar"><div class="fill"></div></div>
+      <div class="plano-box" id="plano-box"></div>
+      <div class="exp-row" id="exp-row" style="display:none">
+        <button class="btn btn-o" onclick="dlPDF()" style="flex:1">📄 PDF</button>
+        <button class="btn btn-o" onclick="dlJSON()" style="flex:1">💾 JSON</button>
+      </div>
+    </div>
+
+    <!-- ESCALA 1–10 -->
+    <div class="eval-card" id="eval-card">
+      <h3>Avaliação do Plano</h3>
+      <p class="desc">Avalie de 1 (discordo totalmente) a 10 (concordo totalmente). Todos os critérios são obrigatórios.</p>
+      <div class="scale-leg">
+        <span>1 — Discordo totalmente</span>
+        <span>10 — Concordo totalmente</span>
+      </div>
+
+      <!-- Métrica 1 -->
+      <div class="metric" id="m1">
         <div class="metric-title">Os objetivos da aula estão claros e coerentes?</div>
         <div class="scale">
-          <span><input type="radio" name="p1" id="p1_1"><label for="p1_1">1</label></span>
-          <span><input type="radio" name="p1" id="p1_2"><label for="p1_2">2</label></span>
-          <span><input type="radio" name="p1" id="p1_3"><label for="p1_3">3</label></span>
-          <span><input type="radio" name="p1" id="p1_4"><label for="p1_4">4</label></span>
-          <span><input type="radio" name="p1" id="p1_5"><label for="p1_5">5</label></span>
-          <span><input type="radio" name="p1" id="p1_6"><label for="p1_6">6</label></span>
-          <span><input type="radio" name="p1" id="p1_7"><label for="p1_7">7</label></span>
-          <span><input type="radio" name="p1" id="p1_8"><label for="p1_8">8</label></span>
+          <span><input type="radio" name="p1" id="p1_1"  onchange="ma('m1')"><label for="p1_1">1</label></span>
+          <span><input type="radio" name="p1" id="p1_2"  onchange="ma('m1')"><label for="p1_2">2</label></span>
+          <span><input type="radio" name="p1" id="p1_3"  onchange="ma('m1')"><label for="p1_3">3</label></span>
+          <span><input type="radio" name="p1" id="p1_4"  onchange="ma('m1')"><label for="p1_4">4</label></span>
+          <span><input type="radio" name="p1" id="p1_5"  onchange="ma('m1')"><label for="p1_5">5</label></span>
+          <span><input type="radio" name="p1" id="p1_6"  onchange="ma('m1')"><label for="p1_6">6</label></span>
+          <span><input type="radio" name="p1" id="p1_7"  onchange="ma('m1')"><label for="p1_7">7</label></span>
+          <span><input type="radio" name="p1" id="p1_8"  onchange="ma('m1')"><label for="p1_8">8</label></span>
+          <span><input type="radio" name="p1" id="p1_9"  onchange="ma('m1')"><label for="p1_9">9</label></span>
+          <span><input type="radio" name="p1" id="p1_10" onchange="ma('m1')"><label for="p1_10">10</label></span>
         </div>
       </div>
 
-      <div class="metric">
-        <div class="metric-title">O plano considera dificuldades dos alunos?</div>
+      <!-- Métrica 2 -->
+      <div class="metric" id="m2">
+        <div class="metric-title">O plano considera as dificuldades dos alunos?</div>
         <div class="scale">
-          <span><input type="radio" name="p2" id="p2_1"><label for="p2_1">1</label></span>
-          <span><input type="radio" name="p2" id="p2_2"><label for="p2_2">2</label></span>
-          <span><input type="radio" name="p2" id="p2_3"><label for="p2_3">3</label></span>
-          <span><input type="radio" name="p2" id="p2_4"><label for="p2_4">4</label></span>
-          <span><input type="radio" name="p2" id="p2_5"><label for="p2_5">5</label></span>
-          <span><input type="radio" name="p2" id="p2_6"><label for="p2_6">6</label></span>
-          <span><input type="radio" name="p2" id="p2_7"><label for="p2_7">7</label></span>
-          <span><input type="radio" name="p2" id="p2_8"><label for="p2_8">8</label></span>
+          <span><input type="radio" name="p2" id="p2_1"  onchange="ma('m2')"><label for="p2_1">1</label></span>
+          <span><input type="radio" name="p2" id="p2_2"  onchange="ma('m2')"><label for="p2_2">2</label></span>
+          <span><input type="radio" name="p2" id="p2_3"  onchange="ma('m2')"><label for="p2_3">3</label></span>
+          <span><input type="radio" name="p2" id="p2_4"  onchange="ma('m2')"><label for="p2_4">4</label></span>
+          <span><input type="radio" name="p2" id="p2_5"  onchange="ma('m2')"><label for="p2_5">5</label></span>
+          <span><input type="radio" name="p2" id="p2_6"  onchange="ma('m2')"><label for="p2_6">6</label></span>
+          <span><input type="radio" name="p2" id="p2_7"  onchange="ma('m2')"><label for="p2_7">7</label></span>
+          <span><input type="radio" name="p2" id="p2_8"  onchange="ma('m2')"><label for="p2_8">8</label></span>
+          <span><input type="radio" name="p2" id="p2_9"  onchange="ma('m2')"><label for="p2_9">9</label></span>
+          <span><input type="radio" name="p2" id="p2_10" onchange="ma('m2')"><label for="p2_10">10</label></span>
         </div>
       </div>
 
-      <div class="metric">
+      <!-- Métrica 3 -->
+      <div class="metric" id="m3">
         <div class="metric-title">As atividades evoluem progressivamente?</div>
         <div class="scale">
-          <span><input type="radio" name="p3" id="p3_1"><label for="p3_1">1</label></span>
-          <span><input type="radio" name="p3" id="p3_2"><label for="p3_2">2</label></span>
-          <span><input type="radio" name="p3" id="p3_3"><label for="p3_3">3</label></span>
-          <span><input type="radio" name="p3" id="p3_4"><label for="p3_4">4</label></span>
-          <span><input type="radio" name="p3" id="p3_5"><label for="p3_5">5</label></span>
-          <span><input type="radio" name="p3" id="p3_6"><label for="p3_6">6</label></span>
-          <span><input type="radio" name="p3" id="p3_7"><label for="p3_7">7</label></span>
-          <span><input type="radio" name="p3" id="p3_8"><label for="p3_8">8</label></span>
+          <span><input type="radio" name="p3" id="p3_1"  onchange="ma('m3')"><label for="p3_1">1</label></span>
+          <span><input type="radio" name="p3" id="p3_2"  onchange="ma('m3')"><label for="p3_2">2</label></span>
+          <span><input type="radio" name="p3" id="p3_3"  onchange="ma('m3')"><label for="p3_3">3</label></span>
+          <span><input type="radio" name="p3" id="p3_4"  onchange="ma('m3')"><label for="p3_4">4</label></span>
+          <span><input type="radio" name="p3" id="p3_5"  onchange="ma('m3')"><label for="p3_5">5</label></span>
+          <span><input type="radio" name="p3" id="p3_6"  onchange="ma('m3')"><label for="p3_6">6</label></span>
+          <span><input type="radio" name="p3" id="p3_7"  onchange="ma('m3')"><label for="p3_7">7</label></span>
+          <span><input type="radio" name="p3" id="p3_8"  onchange="ma('m3')"><label for="p3_8">8</label></span>
+          <span><input type="radio" name="p3" id="p3_9"  onchange="ma('m3')"><label for="p3_9">9</label></span>
+          <span><input type="radio" name="p3" id="p3_10" onchange="ma('m3')"><label for="p3_10">10</label></span>
         </div>
       </div>
 
-      <div class="metric">
-        <div class="metric-title">O plano promove interação dos alunos?</div>
+      <!-- Métrica 4 -->
+      <div class="metric" id="m4">
+        <div class="metric-title">O plano promove a interação dos alunos?</div>
         <div class="scale">
-          <span><input type="radio" name="p4" id="p4_1"><label for="p4_1">1</label></span>
-          <span><input type="radio" name="p4" id="p4_2"><label for="p4_2">2</label></span>
-          <span><input type="radio" name="p4" id="p4_3"><label for="p4_3">3</label></span>
-          <span><input type="radio" name="p4" id="p4_4"><label for="p4_4">4</label></span>
-          <span><input type="radio" name="p4" id="p4_5"><label for="p4_5">5</label></span>
-          <span><input type="radio" name="p4" id="p4_6"><label for="p4_6">6</label></span>
-          <span><input type="radio" name="p4" id="p4_7"><label for="p4_7">7</label></span>
-          <span><input type="radio" name="p4" id="p4_8"><label for="p4_8">8</label></span>
+          <span><input type="radio" name="p4" id="p4_1"  onchange="ma('m4')"><label for="p4_1">1</label></span>
+          <span><input type="radio" name="p4" id="p4_2"  onchange="ma('m4')"><label for="p4_2">2</label></span>
+          <span><input type="radio" name="p4" id="p4_3"  onchange="ma('m4')"><label for="p4_3">3</label></span>
+          <span><input type="radio" name="p4" id="p4_4"  onchange="ma('m4')"><label for="p4_4">4</label></span>
+          <span><input type="radio" name="p4" id="p4_5"  onchange="ma('m4')"><label for="p4_5">5</label></span>
+          <span><input type="radio" name="p4" id="p4_6"  onchange="ma('m4')"><label for="p4_6">6</label></span>
+          <span><input type="radio" name="p4" id="p4_7"  onchange="ma('m4')"><label for="p4_7">7</label></span>
+          <span><input type="radio" name="p4" id="p4_8"  onchange="ma('m4')"><label for="p4_8">8</label></span>
+          <span><input type="radio" name="p4" id="p4_9"  onchange="ma('m4')"><label for="p4_9">9</label></span>
+          <span><input type="radio" name="p4" id="p4_10" onchange="ma('m4')"><label for="p4_10">10</label></span>
         </div>
       </div>
 
-      <div class="metric">
-        <div class="metric-title">O plano pode ser reutilizado, adaptado e serve como referência para outros professores?</div>
+      <!-- Métrica 5 -->
+      <div class="metric" id="m5">
+        <div class="metric-title">O plano pode ser reutilizado como referência?</div>
         <div class="scale">
-          <span><input type="radio" name="p5" id="p5_1"><label for="p5_1">1</label></span>
-          <span><input type="radio" name="p5" id="p5_2"><label for="p5_2">2</label></span>
-          <span><input type="radio" name="p5" id="p5_3"><label for="p5_3">3</label></span>
-          <span><input type="radio" name="p5" id="p5_4"><label for="p5_4">4</label></span>
-          <span><input type="radio" name="p5" id="p5_5"><label for="p5_5">5</label></span>
-          <span><input type="radio" name="p5" id="p5_6"><label for="p5_6">6</label></span>
-          <span><input type="radio" name="p5" id="p5_7"><label for="p5_7">7</label></span>
-          <span><input type="radio" name="p5" id="p5_8"><label for="p5_8">8</label></span>
+          <span><input type="radio" name="p5" id="p5_1"  onchange="ma('m5')"><label for="p5_1">1</label></span>
+          <span><input type="radio" name="p5" id="p5_2"  onchange="ma('m5')"><label for="p5_2">2</label></span>
+          <span><input type="radio" name="p5" id="p5_3"  onchange="ma('m5')"><label for="p5_3">3</label></span>
+          <span><input type="radio" name="p5" id="p5_4"  onchange="ma('m5')"><label for="p5_4">4</label></span>
+          <span><input type="radio" name="p5" id="p5_5"  onchange="ma('m5')"><label for="p5_5">5</label></span>
+          <span><input type="radio" name="p5" id="p5_6"  onchange="ma('m5')"><label for="p5_6">6</label></span>
+          <span><input type="radio" name="p5" id="p5_7"  onchange="ma('m5')"><label for="p5_7">7</label></span>
+          <span><input type="radio" name="p5" id="p5_8"  onchange="ma('m5')"><label for="p5_8">8</label></span>
+          <span><input type="radio" name="p5" id="p5_9"  onchange="ma('m5')"><label for="p5_9">9</label></span>
+          <span><input type="radio" name="p5" id="p5_10" onchange="ma('m5')"><label for="p5_10">10</label></span>
         </div>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label>Comentários (opcional)</label>
+        <textarea class="eval-ta" id="coment" placeholder="Pontos fortes, sugestões, observações..."></textarea>
+      </div>
+      <div style="margin-top:14px">
+        <button class="btn btn-g" id="btn-av" onclick="submeter()" style="width:100%">✅ Salvar Avaliação e Avançar</button>
       </div>
     </div>
-
-    <h3>Comentários:</h3>
-    <textarea id="comentarios" placeholder="Comentários (opcional): pontos fortes, melhorias, problemas..."></textarea>
-
-    <button onclick="salvarAvaliacao()" class="btn-avaliar">✅ Salvar Avaliação</button>
   </div>
-</div>
 
-<!-- HISTÓRICO -->
-<div class="card" id="secaoHistorico">
-  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-    <h3 style="margin:0;">📚 Histórico de Planos</h3>
-    <button class="danger" style="width:auto; padding:8px 16px; font-size:13px;" onclick="limparHistorico()">🗑 Limpar tudo</button>
+  <!-- ===================== COMPLETE ===================== -->
+  <div class="screen" id="s-done">
+    <div class="done-hero">
+      <span class="done-icon">🎉</span>
+      <h2 class="done-title">Experimento Concluído!</h2>
+      <p class="done-sub">Todas as 6 avaliações foram registradas e enviadas. Obrigado pela sua participação!</p>
+      <div class="done-sum">
+        <div class="sum-row"><span class="lbl">Total de avaliações</span><span class="val g">6 / 6</span></div>
+        <div class="sum-row"><span class="lbl">Avaliador</span><span class="val" id="sum-av">—</span></div>
+        <div class="sum-row"><span class="lbl">Modelos avaliados</span><span class="val">GPT-4o + Claude</span></div>
+        <div class="sum-row"><span class="lbl">Sheets</span><span class="val g" id="sum-sh">✓ Enviado</span></div>
+      </div>
+      <div class="done-acts">
+        <button class="btn btn-g" onclick="dlFinalJSON()">📥 Exportar JSON</button>
+        <button class="btn btn-o" onclick="dlFinalCSV()">📊 Exportar CSV</button>
+        <button class="btn btn-danger" onclick="reiniciar()">🔄 Novo Experimento</button>
+      </div>
+    </div>
   </div>
-  <div id="listaHistorico"></div>
-</div>
 
 </div>
 <div class="toast" id="toast"></div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-let dadosAtualForm  = {};
-let planoAtualTexto = "";
-let planoAtualHTML  = "";
+/* =============================================
+   SEQUÊNCIA (espelho do backend)
+============================================= */
+const SEQ = [
+  {etapa:1, ia:"gpt",    iaL:"GPT-4o", topico:"Variáveis e tipos de dados"},
+  {etapa:2, ia:"gpt",    iaL:"GPT-4o", topico:"Estruturas condicionais"},
+  {etapa:3, ia:"gpt",    iaL:"GPT-4o", topico:"Estruturas de repetição"},
+  {etapa:4, ia:"claude", iaL:"Claude", topico:"Variáveis e tipos de dados"},
+  {etapa:5, ia:"claude", iaL:"Claude", topico:"Estruturas condicionais"},
+  {etapa:6, ia:"claude", iaL:"Claude", topico:"Estruturas de repetição"},
+];
 
-function showToast(msg) {
-  const t = document.getElementById("toast");
-  t.textContent = msg; t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 2800);
+/* =============================================
+   ESTADO — tudo no frontend, zero sessão Flask
+============================================= */
+let S = {
+  etapa: 1,
+  avaliador: {id: "", formacao: "", experiencia: ""},
+  nomePDF: "",
+  plano: "",
+  planoHTML: "",
+  gerado: false,
+  avaliacoes: [],
+  sheetsOk: false,
+};
+
+/* =============================================
+   CONSENTIMENTO — habilita/desabilita botão
+============================================= */
+function toggleIniciar() {
+  const checked = document.getElementById("consent-cb").checked;
+  document.getElementById("btn-iniciar").disabled = !checked;
 }
 
-function dispararDownload(blob, nome) {
-  const url = URL.createObjectURL(blob);
-  const a   = document.createElement("a");
-  a.href = url; a.download = nome;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+/* TOAST */
+const toastEl = document.getElementById("toast");
+let toastTimer;
+function toast(msg, tipo = "") {
+  clearTimeout(toastTimer);
+  toastEl.textContent = msg;
+  toastEl.className = "toast on" + (tipo ? " " + tipo : "");
+  toastTimer = setTimeout(() => toastEl.classList.remove("on"), 3500);
 }
 
-async function verificarCache() {
-  const ia = document.getElementById("ia").value;
-  const topico = document.getElementById("topico").value;
+/* SCREENS */
+function show(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+/* =============================================
+   INICIAR
+============================================= */
+function iniciar() {
+  const id = document.getElementById("f-id").value.trim();
+  if (!id) { toast("Informe seu identificador.", "er"); return; }
+
+  const consentOk = document.getElementById("consent-cb").checked;
+  if (!consentOk) { toast("Você precisa aceitar o termo de consentimento.", "er"); return; }
+
+  S.avaliador = {
+    id,
+    formacao:    document.getElementById("f-form").value,
+    experiencia: document.getElementById("f-exp").value,
+  };
+  S.etapa = 1;
+  S.avaliacoes = [];
+  S.sheetsOk = false;
+  show("s-exp");
+  atualizarUI();
+  toast("Bem-vindo, " + id + "! Etapa 1/6.", "ok");
+}
+
+/* =============================================
+   ATUALIZAR UI
+============================================= */
+function atualizarUI() {
+  const e = SEQ[S.etapa - 1];
+  const prox = SEQ[S.etapa] || null;
+
+  document.getElementById("frac").textContent = S.etapa + " / 6";
+  document.getElementById("pfill").style.width = (((S.etapa - 1) / 6) * 100) + "%";
+
+  document.querySelectorAll(".dot").forEach(d => {
+    const n = parseInt(d.dataset.s);
+    d.className = "dot" + (n < S.etapa ? " done" : n === S.etapa ? " active" : "");
+  });
+
+  document.getElementById("sc-num").textContent  = `Avaliação ${S.etapa} de 6`;
+  const bia = document.getElementById("b-ia");
+  bia.textContent = e.iaL;
+  bia.className   = "badge " + (e.ia === "gpt" ? "badge-gpt" : "badge-claude");
+  document.getElementById("b-topic").textContent  = e.topico;
+  document.getElementById("sc-title").textContent = "Tópico: " + e.topico;
+  document.getElementById("sc-sub").textContent   = `O sistema usará ${e.iaL} com o material do servidor.`;
+
+  const nxt = document.getElementById("nxt");
+  if (prox) {
+    document.getElementById("nxt-lbl").textContent = `${prox.iaL} + ${prox.topico}`;
+    nxt.style.display = "flex";
+  } else {
+    nxt.style.display = "none";
+  }
+
+  // Reset área de geração
+  S.plano = ""; S.planoHTML = ""; S.gerado = false;
+  document.getElementById("plano-box").style.display  = "none";
+  document.getElementById("plano-box").innerHTML      = "";
+  document.getElementById("exp-row").style.display    = "none";
+  document.getElementById("lbar").style.display       = "none";
+  document.getElementById("gen-status").textContent   = "Clique em gerar para iniciar esta etapa.";
+  document.getElementById("btn-gerar").disabled       = false;
+  document.getElementById("btn-gerar").textContent    = "⚡ Gerar Plano de Aula";
+
+  // Reset avaliação
+  document.querySelectorAll("input[type=radio]").forEach(r => r.checked = false);
+  document.querySelectorAll(".metric").forEach(m => m.classList.remove("answered"));
+  document.getElementById("coment").value = "";
+  document.getElementById("eval-card").classList.remove("on");
+  document.getElementById("btn-av").disabled    = false;
+  document.getElementById("btn-av").textContent = "✅ Salvar Avaliação e Avançar";
+}
+
+/* =============================================
+   GERAR — envia etapa para backend validar
+============================================= */
+async function gerarPlano() {
+  const e = SEQ[S.etapa - 1];
+  document.getElementById("btn-gerar").disabled     = true;
+  document.getElementById("btn-gerar").textContent  = "⏳ Gerando...";
+  document.getElementById("lbar").style.display     = "block";
+  document.getElementById("gen-status").textContent = `Gerando com ${e.iaL} — "${e.topico}"...`;
+
+  const box = document.getElementById("plano-box");
+  box.style.display = "block";
+  box.innerHTML = '<span style="color:var(--text3);font-size:13px">Aguardando IA...</span>';
+
   try {
-    const res  = await fetch(`/topicos?ia=${ia}`);
-    const list = await res.json();
-    const item = list.find(t => t.topico === topico);
-    console.log(item && item.cache_existe ? "Cache disponível" : "Será gerado");
-  } catch(e) {}
+    const res = await fetch("/gerar", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({etapa: S.etapa}),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.erro || `HTTP ${res.status}`);
+    }
+
+    const reader  = res.body.getReader();
+    const decoder = new TextDecoder();
+    S.plano = "";
+    box.innerHTML = "";
+
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      S.plano += decoder.decode(value);
+      S.planoHTML = formatarPlano(S.plano);
+      box.innerHTML = S.planoHTML;
+    }
+
+    document.getElementById("lbar").style.display     = "none";
+    document.getElementById("exp-row").style.display  = "flex";
+    document.getElementById("gen-status").textContent = "✅ Plano gerado! Avalie abaixo.";
+    document.getElementById("eval-card").classList.add("on");
+    S.gerado = true;
+    setTimeout(() => document.getElementById("eval-card").scrollIntoView({behavior: "smooth", block: "start"}), 350);
+    toast("Plano gerado!", "ok");
+
+  } catch (err) {
+    document.getElementById("lbar").style.display     = "none";
+    document.getElementById("gen-status").textContent = "❌ Erro. Tente novamente.";
+    document.getElementById("btn-gerar").disabled     = false;
+    document.getElementById("btn-gerar").textContent  = "⚡ Gerar Plano de Aula";
+    toast("Erro: " + err.message, "er");
+  }
 }
 
-function limparCampo(texto) {
-  if (!texto) return "—";
-  return texto.split(/Recursos didáticos:|Metodologia:|Atividade:|Avaliação:/)[0].trim();
+/* FORMATAR */
+function lp(txt) {
+  if (!txt || txt === "—") return "<li>—</li>";
+  return txt.split(/\.|\n|;/).map(t => t.trim()).filter(t => t.length > 4).map(t => `<li>${t}</li>`).join("");
 }
-
-function extrairSecao(texto, campo) {
-  const regex = new RegExp(campo + ":(.*?)(?=Conteúdo:|Recursos didáticos:|Metodologia:|Atividade:|Avaliação:|$)", "s");
-  const match = texto.match(regex);
-  return match ? limparCampo(match[1]) : "—";
+function sec(txt, campo) {
+  const m = txt.match(new RegExp(campo + ":(.*?)(?=Conteúdo:|Recursos didáticos:|Metodologia:|Atividade:|Avaliação:|$)", "s"));
+  if (!m) return "—";
+  return m[1].split(/Recursos didáticos:|Metodologia:|Atividade:|Avaliação:/)[0].trim();
 }
-
-function lista(texto) {
-  if (!texto || texto === "—") return "<li>—</li>";
-  return texto.split(/\.|\n|;/).map(t => t.trim()).filter(t => t.length > 5).map(t => `<li>${t}</li>`).join("");
-}
-
-function formatarPlano(texto) {
-  const partes = texto.split(/=== AULA (\d+) ===/g);
+function formatarPlano(txt) {
+  const parts = txt.split(/=== AULA (\d+) ===/g);
   let html = "";
-  for (let i = 1; i < partes.length; i += 2) {
-    const bloco = partes[i + 1];
+  for (let i = 1; i < parts.length; i += 2) {
+    const b = parts[i + 1];
     html += `<div class="aula-card">
-      <div class="aula-header">Aula ${partes[i]}</div>
-      <div class="aula-section"><h4>📘 Conteúdo</h4><ul>${lista(extrairSecao(bloco,"Conteúdo"))}</ul></div>
-      <div class="aula-section"><h4>🧰 Recursos</h4><ul>${lista(extrairSecao(bloco,"Recursos didáticos"))}</ul></div>
-      <div class="aula-section"><h4>🎯 Metodologia</h4><ul>${lista(extrairSecao(bloco,"Metodologia"))}</ul></div>
-      <div class="aula-section"><h4>📝 Atividade</h4><ul>${lista(extrairSecao(bloco,"Atividade"))}</ul></div>
-      <div class="aula-section"><h4>✅ Avaliação</h4><ul>${lista(extrairSecao(bloco,"Avaliação"))}</ul></div>
+      <div class="aula-hdr">Aula ${parts[i]}</div>
+      <div class="aula-sec"><h4>📘 Conteúdo</h4><ul>${lp(sec(b, "Conteúdo"))}</ul></div>
+      <div class="aula-sec"><h4>🧰 Recursos</h4><ul>${lp(sec(b, "Recursos didáticos"))}</ul></div>
+      <div class="aula-sec"><h4>🎯 Metodologia</h4><ul>${lp(sec(b, "Metodologia"))}</ul></div>
+      <div class="aula-sec"><h4>📝 Atividade</h4><ul>${lp(sec(b, "Atividade"))}</ul></div>
+      <div class="aula-sec"><h4>✅ Avaliação</h4><ul>${lp(sec(b, "Avaliação"))}</ul></div>
     </div>`;
   }
   return html;
 }
 
-document.getElementById("form").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const conteudo  = document.getElementById("conteudo");
-  const resultado = document.getElementById("resultado");
-  resultado.style.display = "flex";
-  conteudo.innerHTML = "Carregando...";
-
-  const formData = new FormData(this);
-  dadosAtualForm = {};
-  for (const [k, v] of formData.entries()) {
-    dadosAtualForm[k === "arquivo" ? "nomeArquivo" : k] = (k === "arquivo") ? (v && v.name ? v.name : "") : v;
-  }
-
-  planoAtualTexto = ""; planoAtualHTML = "";
-
-  const response = await fetch("/gerar", { method: "POST", body: formData });
-  const reader   = response.body.getReader();
-  const decoder  = new TextDecoder();
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    planoAtualTexto += decoder.decode(value);
-    planoAtualHTML   = formatarPlano(planoAtualTexto);
-    conteudo.innerHTML = planoAtualHTML;
-  }
-});
-
-/* lê radio selecionado: id formato pN_V => valor = V */
-function getVal(name) {
-  const el = document.querySelector(`input[name="${name}"]:checked`);
-  return el ? parseInt(el.id.split("_")[1]) : "";
+function ma(id) { document.getElementById(id).classList.add("answered"); }
+function gv(n) {
+  const el = document.querySelector(`input[name="${n}"]:checked`);
+  return el ? parseInt(el.id.split("_")[1]) : null;
 }
 
-/* ── SALVAR AVALIAÇÃO: gera CSV + JSON ── */
-function salvarAvaliacao() {
-  if (!planoAtualTexto) { showToast("Gere um plano primeiro."); return; }
-
-  // Novos campos de perfil do avaliador
-  const avaliadorId = document.getElementById("avaliadorId").value;
-  const experiencia = document.getElementById("experiencia").value;
-  const formacao    = document.getElementById("formacao").value;
-  const area        = document.getElementById("area").value;
-  const observacoes = document.getElementById("comentarios").value;
+/* =============================================
+   SUBMETER — estado completo no body, sem sessão
+============================================= */
+async function submeter() {
+  if (!S.gerado) { toast("Gere o plano antes de avaliar.", "er"); return; }
 
   const metricas = [
-    { pergunta: "Os objetivos da aula estão claros e coerentes?",                          valor: getVal("p1") },
-    { pergunta: "O plano considera dificuldades dos alunos?",                              valor: getVal("p2") },
-    { pergunta: "As atividades evoluem progressivamente?",                                 valor: getVal("p3") },
-    { pergunta: "O plano promove interação dos alunos?",                                   valor: getVal("p4") },
-    { pergunta: "O plano pode ser reutilizado, adaptado e serve como referência?",         valor: getVal("p5") }
+    {pergunta: "Os objetivos da aula estão claros e coerentes?",  valor: gv("p1")},
+    {pergunta: "O plano considera as dificuldades dos alunos?",   valor: gv("p2")},
+    {pergunta: "As atividades evoluem progressivamente?",          valor: gv("p3")},
+    {pergunta: "O plano promove a interação dos alunos?",          valor: gv("p4")},
+    {pergunta: "O plano pode ser reutilizado como referência?",    valor: gv("p5")},
   ];
 
-  const inp = dadosAtualForm;
-
-  const partes = planoAtualTexto.split(/=== AULA (\d+) ===/g);
-  const aulas = [];
-  for (let i = 1; i < partes.length; i += 2) {
-    const bloco = partes[i + 1] || "";
-    aulas.push({
-      numero:      partes[i],
-      conteudo:    extrairSecao(bloco, "Conteúdo"),
-      recursos:    extrairSecao(bloco, "Recursos didáticos"),
-      metodologia: extrairSecao(bloco, "Metodologia"),
-      atividade:   extrairSecao(bloco, "Atividade"),
-      avaliacao:   extrairSecao(bloco, "Avaliação")
-    });
+  if (metricas.some(m => m.valor === null)) {
+    toast("Responda todas as 5 métricas.", "er");
+    return;
   }
 
-  const topSlug = (inp.topico || "plano").replace(/\s+/g, "_").toLowerCase();
-  const ts      = Date.now();
+  document.getElementById("btn-av").disabled    = true;
+  document.getElementById("btn-av").textContent = "⏳ Enviando...";
 
-  function esc(v) {
-    const s = String(v == null ? "" : v).replace(/"/g, '""');
-    return /[,"\n\r]/.test(s) ? '"' + s + '"' : s;
-  }
-
-  /* ── CSV ── */
-  const linhas = [];
-  linhas.push(["Campo", "Valor"]);
-  linhas.push(["Disciplina",        inp.disciplina    || ""]);
-  linhas.push(["Curso",             inp.curso         || ""]);
-  linhas.push(["Carga Horária",     inp.carga         || ""]);
-  linhas.push(["Número de Aulas",   inp.qtd_aulas     || ""]);
-  linhas.push(["Duração",           inp.duracao       || ""]);
-  linhas.push(["Ementa",            inp.ementa        || ""]);
-  linhas.push(["Objetivo",          inp.objetivo      || ""]);
-  linhas.push(["Nome do Livro/PDF", inp.nomeArquivo   || ""]);
-  linhas.push(["Modelo IA",         inp.ia            || ""]);
-  linhas.push(["Tópico",            inp.topico        || ""]);
-  linhas.push([]);
-  aulas.forEach(a => {
-    linhas.push(["Aula " + a.numero, ""]);
-    linhas.push(["Conteúdo",           a.conteudo]);
-    linhas.push(["Recursos didáticos", a.recursos]);
-    linhas.push(["Metodologia",        a.metodologia]);
-    linhas.push(["Atividade",          a.atividade]);
-    linhas.push(["Avaliação",          a.avaliacao]);
-    linhas.push([]);
-  });
-  linhas.push(["Avaliação do Professor", ""]);
-  // Novos campos no CSV
-  linhas.push(["Avaliador ID",       avaliadorId]);
-  linhas.push(["Experiência (anos)", experiencia]);
-  linhas.push(["Formação",           formacao]);
-  linhas.push(["Área de atuação",    area]);
-  metricas.forEach(m => linhas.push([m.pergunta, m.valor]));
-  linhas.push(["Observações", observacoes]);
-
-  const csv = "\uFEFF" + linhas.map(r => r.map(esc).join(",")).join("\r\n");
-  dispararDownload(new Blob([csv], { type: "text/csv;charset=utf-8;" }), "plano_" + topSlug + "_" + ts + ".csv");
-
-  /* ── JSON (400ms delay) ── */
-  const registro = {
-    id: ts,
-    geradoEm: new Date().toISOString(),
-    inputs: {
-      disciplina:  inp.disciplina  || "",
-      curso:       inp.curso       || "",
-      carga:       inp.carga       || "",
-      qtd_aulas:   inp.qtd_aulas   || "",
-      duracao:     inp.duracao     || "",
-      ementa:      inp.ementa      || "",
-      objetivo:    inp.objetivo    || "",
-      nomeArquivo: inp.nomeArquivo || "",
-      modelo:      inp.ia          || "",
-      topico:      inp.topico      || ""
-    },
-    plano: { aulas, textoRaw: planoAtualTexto },
-    // Novos campos no JSON
-    avaliacaoProfessor: {
-      id: avaliadorId,
-      experiencia,
-      formacao,
-      area,
-      metricas,
-      observacoes
-    }
+  const ts = new Date().toISOString();
+  const payload = {
+    etapa:      S.etapa,
+    avaliador:  S.avaliador,
+    nomePDF:    S.nomePDF || "material_referencia.pdf",
+    avaliacao:  {metricas, comentarios: document.getElementById("coment").value, timestamp: ts},
+    planoTexto: S.plano,
+    timestamp:  ts,
   };
 
-  setTimeout(() => {
-    dispararDownload(
-      new Blob([JSON.stringify(registro, null, 2)], { type: "application/json" }),
-      "plano_" + topSlug + "_" + ts + ".json"
-    );
-    showToast("CSV e JSON salvos!");
-  }, 400);
-
-  enviarParaSheets("https://script.google.com/macros/s/AKfycbxJL2KV18rX6rfFDHx9_vQ5WuNCQhS-RqjuT2NaT5_5djAc4dDLbPRBWQdo1QIxqCg-/exec", registro);
-}
-
-async function enviarParaSheets(url, registro) {
-  showToast("Enviando para Google Sheets...");
   try {
-    await fetch(url, {
+    const res = await fetch("/experimento/avancar", {
       method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(registro)
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload),
     });
-    setTimeout(() => showToast("✅ Enviado para Google Sheets!"), 600);
-  } catch(e) {
-    showToast("❌ Erro ao enviar para Sheets: " + e.message);
+
+    if (!res.ok) {
+      let msg = `Servidor retornou ${res.status}`;
+      try { const e = await res.json(); msg = e.erro || msg; } catch (_) {}
+      throw new Error(msg);
+    }
+
+    const data = await res.json();
+    S.sheetsOk = S.sheetsOk || (data.sheets_ok || false);
+
+    S.avaliacoes.push({...payload});
+    localStorage.setItem("exp_backup", JSON.stringify({avaliador: S.avaliador, avaliacoes: S.avaliacoes}));
+
+    if (data.concluido) {
+      concluir();
+    } else {
+      S.etapa++;
+      toast(`✅ Etapa ${S.etapa - 1} salva! Próxima: ${S.etapa}/6.`, "ok");
+      atualizarUI();
+    }
+
+  } catch (err) {
+    toast("Erro: " + err.message, "er");
+    document.getElementById("btn-av").disabled    = false;
+    document.getElementById("btn-av").textContent = "✅ Salvar Avaliação e Avançar";
   }
 }
 
-function montarRegistro() {
-  return {
-    id: Date.now(),
-    geradoEm: new Date().toISOString(),
-    inputs: dadosAtualForm,
-    plano: { textoRaw: planoAtualTexto, html: planoAtualHTML },
-    avaliacao: {
-      avaliadorId:  document.getElementById("avaliadorId").value,
-      experiencia:  document.getElementById("experiencia").value,
-      formacao:     document.getElementById("formacao").value,
-      area:         document.getElementById("area").value,
-      observacoes:  document.getElementById("comentarios").value
-    }
-  };
+/* =============================================
+   CONCLUSÃO
+============================================= */
+function concluir() {
+  document.getElementById("sum-av").textContent = S.avaliador.id;
+  document.getElementById("sum-sh").textContent = S.sheetsOk ? "✓ Enviado" : "⚠ Verificar";
+  show("s-done");
+  toast("🎉 Experimento concluído!", "ok");
 }
 
-function baixarJSON() {
-  if (!planoAtualTexto) { showToast("Gere um plano primeiro."); return; }
-  const r = montarRegistro();
-  dispararDownload(new Blob([JSON.stringify(r, null, 2)], { type: "application/json" }), "plano_" + (dadosAtualForm.topico||"plano").replace(/\s+/g,"_").toLowerCase() + "_" + r.id + ".json");
-  showToast("JSON baixado!");
+/* DOWNLOAD */
+function dl(blob, nome) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = nome;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-function salvarNoHistorico() {
-  if (!planoAtualTexto) { showToast("Gere um plano primeiro."); return; }
-  const h = JSON.parse(localStorage.getItem("planos_historico") || "[]");
-  h.unshift(montarRegistro());
-  localStorage.setItem("planos_historico", JSON.stringify(h));
-  renderHistorico();
-  showToast("Plano salvo no histórico!");
+function dlFinalJSON() {
+  dl(new Blob([JSON.stringify({avaliador: S.avaliador, sequencia: SEQ, avaliacoes: S.avaliacoes, geradoEm: new Date().toISOString()}, null, 2)], {type: "application/json"}),
+    `experimento_${S.avaliador.id}_${Date.now()}.json`);
 }
 
-function renderHistorico() {
-  const h  = JSON.parse(localStorage.getItem("planos_historico") || "[]");
-  const el = document.getElementById("listaHistorico");
-  if (h.length === 0) { el.innerHTML = '<div class="empty-state">Nenhum plano salvo ainda.</div>'; return; }
-  el.innerHTML = h.map(r => {
-    const data        = new Date(r.geradoEm).toLocaleString("pt-BR");
-    const topico      = r.inputs?.topico || "—";
-    const ia          = r.inputs?.ia?.toUpperCase() || "—";
-    // Suporte a registros antigos (campo professor) e novos (campo avaliadorId)
-    const avaliador   = r.avaliacao?.avaliadorId || r.avaliacao?.professor || "";
-    const sufixo      = avaliador ? ` · Avaliador: ${avaliador}` : "";
-    return `<div class="historico-card">
-      <div class="historico-info">
-        <div class="historico-titulo">${topico} <span class="badge-ia">${ia}</span></div>
-        <div class="historico-meta">${data}${sufixo}</div>
-      </div>
-      <div class="historico-acoes">
-        <button class="secondary" onclick="verPlano(${r.id})">👁 Ver</button>
-        <button class="secondary" onclick="exportarRegistroJSON(${r.id})">💾 JSON</button>
-        <button class="secondary" onclick="exportarRegistroPDF(${r.id})">📄 PDF</button>
-        <button class="danger"    onclick="removerRegistro(${r.id})">🗑</button>
-      </div>
-    </div>`;
-  }).join("");
-}
-
-function verPlano(id) {
-  const r = JSON.parse(localStorage.getItem("planos_historico") || "[]").find(x => x.id === id);
-  if (!r) return;
-  dadosAtualForm = r.inputs; planoAtualTexto = r.plano.textoRaw; planoAtualHTML = r.plano.html;
-  document.getElementById("conteudo").innerHTML = planoAtualHTML;
-  document.getElementById("resultado").style.display = "flex";
-  // Restaura campos do perfil do avaliador (com fallback para registros antigos)
-  document.getElementById("avaliadorId").value = r.avaliacao?.avaliadorId || r.avaliacao?.professor || "";
-  document.getElementById("experiencia").value = r.avaliacao?.experiencia || "";
-  document.getElementById("formacao").value    = r.avaliacao?.formacao    || "";
-  document.getElementById("area").value        = r.avaliacao?.area        || "";
-  document.getElementById("comentarios").value = r.avaliacao?.observacoes || "";
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  showToast("Plano carregado do histórico.");
-}
-
-function exportarRegistroJSON(id) {
-  const r = JSON.parse(localStorage.getItem("planos_historico") || "[]").find(x => x.id === id);
-  if (!r) return;
-  dispararDownload(new Blob([JSON.stringify(r, null, 2)], { type: "application/json" }), "plano_" + (r.inputs?.topico||"").replace(/\s+/g,"_").toLowerCase() + "_" + r.id + ".json");
-  showToast("JSON exportado!");
-}
-
-function removerRegistro(id) {
-  const h = JSON.parse(localStorage.getItem("planos_historico") || "[]").filter(x => x.id !== id);
-  localStorage.setItem("planos_historico", JSON.stringify(h));
-  renderHistorico(); showToast("Registro removido.");
-}
-
-function limparHistorico() {
-  if (!confirm("Deseja apagar todo o histórico de planos?")) return;
-  localStorage.removeItem("planos_historico");
-  renderHistorico(); showToast("Histórico apagado.");
-}
-
-function baixarPDF() { gerarPDF(document.getElementById("conteudo"), dadosAtualForm?.topico || "plano"); }
-
-function exportarRegistroPDF(id) {
-  const r = JSON.parse(localStorage.getItem("planos_historico") || "[]").find(x => x.id === id);
-  if (!r) return;
-  const tmp = document.createElement("div"); tmp.innerHTML = r.plano.html;
-  gerarPDF(tmp, r.inputs?.topico || "plano");
-}
-
-function gerarPDF(containerEl, topicoNome) {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  let y = 20; const margemX = 15, largura = 180;
-  doc.setFont("times","bold"); doc.setFontSize(16);
-  doc.text("PLANO DE AULA", 105, y, { align: "center" }); y += 12;
-  const texto = containerEl.innerText.replace(/[^\x20-\x7EÀ-ÿ\n\r]/g,"").replace(/\n{2,}/g,"\n");
-  texto.split(/\n(?=Aula\s\d+)/g).forEach((aula, index) => {
-    if (index > 0) { doc.addPage(); y = 20; }
-    aula.split("\n").forEach(linha => {
-      if (y > 280) { doc.addPage(); y = 20; }
-      const t = linha.trim(); if (!t) return;
-      if (t.startsWith("Aula")) { doc.setFont("times","bold"); doc.setFontSize(14); y += 2; }
-      else if (["CONTEÚDO","RECURSOS","METODOLOGIA","ATIVIDADE","AVALIAÇÃO"].includes(t)) { doc.setFont("times","bold"); doc.setFontSize(12); y += 3; }
-      else { doc.setFont("times","normal"); doc.setFontSize(11); }
-      const q = doc.splitTextToSize(t, largura);
-      doc.text(q, margemX, y); y += q.length * 6 + 2;
+function dlFinalCSV() {
+  const linhas = [["Etapa", "IA", "Tópico", "Avaliador", "Pergunta", "Valor", "Comentários", "Timestamp"]];
+  S.avaliacoes.forEach(av => {
+    (av.avaliacao.metricas || []).forEach(m => {
+      linhas.push([av.etapa, SEQ[av.etapa - 1].iaL, SEQ[av.etapa - 1].topico,
+        S.avaliador.id, m.pergunta, m.valor, av.avaliacao.comentarios || "", av.timestamp]);
     });
   });
-  doc.save("plano_" + topicoNome.replace(/\s+/g,"_").toLowerCase() + ".pdf");
-  showToast("PDF gerado com sucesso!");
+  const esc = v => { const s = String(v ?? "").replace(/"/g, '""'); return /[,"\n\r]/.test(s) ? `"${s}"` : s; };
+  dl(new Blob(["\uFEFF" + linhas.map(r => r.map(esc).join(",")).join("\r\n")], {type: "text/csv;charset=utf-8;"}),
+    `experimento_${S.avaliador.id}_${Date.now()}.csv`);
 }
 
-renderHistorico();
+function dlPDF() {
+  if (!S.plano) { toast("Sem plano.", "er"); return; }
+  const e = SEQ[S.etapa - 1];
+  const {jsPDF} = window.jspdf;
+  const doc = new jsPDF(); let y = 20;
+  doc.setFont("times", "bold"); doc.setFontSize(16);
+  doc.text("PLANO DE AULA", 105, y, {align: "center"}); y += 8;
+  doc.setFontSize(10); doc.setFont("times", "normal"); doc.setTextColor(100);
+  doc.text(`IA: ${e.iaL}  |  Tópico: ${e.topico}`, 105, y, {align: "center"}); y += 12;
+  doc.setTextColor(0);
+  const tmp = document.createElement("div"); tmp.innerHTML = S.planoHTML;
+  tmp.innerText.replace(/[^\x20-\x7EÀ-ÿ\n\r]/g, "").split("\n").forEach(linha => {
+    if (y > 280) { doc.addPage(); y = 20; }
+    const t = linha.trim(); if (!t) return;
+    if (t.startsWith("Aula")) { doc.setFont("times", "bold"); doc.setFontSize(14); y += 2; }
+    else { doc.setFont("times", "normal"); doc.setFontSize(11); }
+    const q = doc.splitTextToSize(t, 180);
+    doc.text(q, 15, y); y += q.length * 6 + 2;
+  });
+  doc.save(`plano_${e.ia}_${e.topico.replace(/\s+/g, "_")}.pdf`);
+}
+
+function dlJSON() {
+  if (!S.plano) { toast("Sem plano.", "er"); return; }
+  const e = SEQ[S.etapa - 1];
+  dl(new Blob([JSON.stringify({etapa: e.etapa, ia: e.ia, topico: e.topico, plano: S.plano, geradoEm: new Date().toISOString()}, null, 2)], {type: "application/json"}),
+    `plano_${e.ia}_${e.topico.replace(/\s+/g, "_")}.json`);
+}
+
+function reiniciar() {
+  if (!confirm("Reiniciar experimento do zero?")) return;
+  fetch("/experimento/reiniciar", {method: "POST"}).catch(() => {});
+  localStorage.removeItem("exp_backup");
+  S = {etapa: 1, avaliador: {id: "", formacao: "", experiencia: ""}, nomePDF: "", plano: "", planoHTML: "", gerado: false, avaliacoes: [], sheetsOk: false};
+  document.getElementById("f-id").value   = "";
+  document.getElementById("f-form").value = "";
+  document.getElementById("f-exp").value  = "";
+  document.getElementById("consent-cb").checked = false;
+  document.getElementById("btn-iniciar").disabled = true;
+  show("s-setup");
+}
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>
