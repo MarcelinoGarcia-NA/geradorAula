@@ -27,10 +27,10 @@ def extrair_trechos_relevantes(texto, topico, limite=10):
 def gerar_plano_stream(dados, topico, ia="gpt", texto_pdf=""):
 
     disciplina = dados.get("disciplina", "")
-    curso = dados.get("curso", "")
-    carga = dados.get("carga", "")
-    objetivo = dados.get("objetivo", "")
-    ementa = dados.get("ementa", "")
+    curso      = dados.get("curso", "")
+    carga      = dados.get("carga", "")
+    objetivo   = dados.get("objetivo", "")
+    ementa     = dados.get("ementa", "")
 
     # =========================
     # 🔥 CONTEXTO INTELIGENTE
@@ -39,7 +39,6 @@ def gerar_plano_stream(dados, topico, ia="gpt", texto_pdf=""):
 
     if texto_pdf and texto_pdf.strip():
         texto_relevante = extrair_trechos_relevantes(texto_pdf, topico)
-
         contexto = f"""
 === MATERIAL DE REFERÊNCIA (USO OBRIGATÓRIO) ===
 {texto_relevante}
@@ -185,7 +184,7 @@ If you do not follow ALL rules above EXACTLY, your answer is INVALID.
         client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
         with client.messages.stream(
-            model="claude-opus-4-7",
+            model="claude-opus-4-5",
             max_tokens=4000,
             messages=[{"role": "user", "content": prompt}]
         ) as stream:
